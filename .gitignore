@@ -11,6 +11,7 @@ __pycache__/
 
 # Arquivos de banco de dados e planilhas sensíveis
 *.sql
+!db_fluxocapital_sync.sql
 *.xlsx
 *.sqlite
 *.sqlite3
