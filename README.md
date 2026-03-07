@@ -59,13 +59,6 @@ mysql -u root -p -e "FLUSH PRIVILEGES;"
 mysql -u root -p db_fluxocapital < db_fluxocapital_sync.sql
 ```
 
-*(Opcional) Se preferir utilizar outras credenciais, crie um arquivo `.env` na raiz do projeto:*
-```ini
-DB_USER=seu_usuario
-DB_PASS=sua_senha
-DB_HOST=localhost
-DB_NAME=db_fluxocapital
-```
 
 ### Execução Local:
 ```bash
