@@ -333,25 +333,36 @@
                 e.target.value = value;
             });
 
+            // Função auxiliar de validação
+            const validateAndShowError = () => {
+                const cpfValue = input.value.replace(/\D/g, '');
+                if (cpfValue && !validateCPF(cpfValue)) {
+                    input.classList.add('is-invalid');
+
+                    let feedback = input.nextElementSibling;
+                    if (!feedback || !feedback.classList.contains('invalid-feedback')) {
+                        feedback = document.createElement('div');
+                        feedback.className = 'invalid-feedback';
+                        feedback.innerText = 'CPF inválido.';
+                        input.after(feedback);
+                    }
+                    return false;
+                } else {
+                    input.classList.remove('is-invalid');
+                    return true;
+                }
+            };
+
+            // Valida ao sair do campo (blur)
+            input.addEventListener('blur', validateAndShowError);
+
             // Valida ao enviar o formulário
             const form = input.closest('form');
             if (form) {
                 form.addEventListener('submit', function (e) {
-                    const cpfValue = input.value.replace(/\D/g, '');
-                    if (cpfValue && !validateCPF(cpfValue)) {
+                    if (!validateAndShowError()) {
                         e.preventDefault();
-                        input.classList.add('is-invalid');
-
-                        let feedback = input.nextElementSibling;
-                        if (!feedback || !feedback.classList.contains('invalid-feedback')) {
-                            feedback = document.createElement('div');
-                            feedback.className = 'invalid-feedback';
-                            feedback.innerText = 'CPF inválido.';
-                            input.after(feedback);
-                        }
                         input.focus();
-                    } else {
-                        input.classList.remove('is-invalid');
                     }
                 });
             }
