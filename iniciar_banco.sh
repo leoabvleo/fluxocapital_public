@@ -8,18 +8,31 @@ echo "e importará os dados de teste."
 echo ""
 
 # Tenta conectar como root sem senha primeiro
-if mysql -u root -e "exit" 2>/dev/null; then
-    echo "Identificado: MySQL root sem senha."
+# Nota: No Mac/Linux, se o MySQL estiver usando auth_socket para o root, 
+# ele não pedirá senha mas exigirá que você seja o usuário do sistema correspondente (ou sudo).
+if mysql -u root -e "exit" >/dev/null 2>&1; then
+    echo "Identificado: MySQL root acessível sem senha."
     MYSQL_CMD="mysql -u root"
 else
-    echo "MySQL root exige senha ou acesso negado."
-    read -s -p "Digite a senha do root do MySQL/MariaDB: " MYSQL_ROOT_PASSWORD
+    echo "MySQL root exige senha, sudo ou acesso negado."
+    echo "Dica: Em sistemas Linux/Mac, se o comando acima falhou, tente rodar este script com 'sudo ./iniciar_banco.sh'"
     echo ""
-    MYSQL_CMD="mysql -u root -p$MYSQL_ROOT_PASSWORD"
+    read -s -p "Digite a senha do root do MySQL/MariaDB (ou deixe em branco para tentar sem): " MYSQL_ROOT_PASSWORD
+    echo ""
+    
+    if [ -z "$MYSQL_ROOT_PASSWORD" ]; then
+        MYSQL_CMD="mysql -u root"
+    else
+        MYSQL_CMD="mysql -u root -p$MYSQL_ROOT_PASSWORD"
+    fi
 fi
 
 echo "[1/5] Criando o banco de dados 'db_fluxocapital'..."
-$MYSQL_CMD -e "CREATE DATABASE IF NOT EXISTS db_fluxocapital;"
+if ! $MYSQL_CMD -e "CREATE DATABASE IF NOT EXISTS db_fluxocapital;" 2>/dev/null; then
+    echo "⚠️  Não foi possível criar o banco com 'mysql -u root'. Tentando com sudo..."
+    MYSQL_CMD="sudo mysql -u root"
+    $MYSQL_CMD -e "CREATE DATABASE IF NOT EXISTS db_fluxocapital;"
+fi
 
 echo "[2/5] Criando o usuário 'user_fluxocapital'..."
 $MYSQL_CMD -e "CREATE USER IF NOT EXISTS 'user_fluxocapital'@'localhost' IDENTIFIED BY '1qhnTXZDCz8P4cB7n';" 2>/dev/null || $MYSQL_CMD -e "ALTER USER 'user_fluxocapital'@'localhost' IDENTIFIED BY '1qhnTXZDCz8P4cB7n';"
