@@ -1,0 +1,165 @@
+
+2026-03-06 15:54:48,344 ERROR: Exception on /login [POST]
+Traceback (most recent call last):
+  File "/var/www/fluxocapital/venv/lib/python3.8/site-packages/mysql/connector/connection_cext.py", line 334, in _open_connection
+    self._cmysql.connect(**cnx_kwargs)
+_mysql_connector.MySQLInterfaceError: Access denied for user 'user_fluxocapital'@'localhost' to database 'db_fluxocapital'
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/var/www/fluxocapital/venv/lib/python3.8/site-packages/sqlalchemy/engine/base.py", line 143, in __init__
+    self._dbapi_connection = engine.raw_connection()
+  File "/var/www/fluxocapital/venv/lib/python3.8/site-packages/sqlalchemy/engine/base.py", line 3317, in raw_connection
+    return self.pool.connect()
+  File "/var/www/fluxocapital/venv/lib/python3.8/site-packages/sqlalchemy/pool/base.py", line 448, in connect
+    return _ConnectionFairy._checkout(self)
+  File "/var/www/fluxocapital/venv/lib/python3.8/site-packages/sqlalchemy/pool/base.py", line 1272, in _checkout
+    fairy = _ConnectionRecord.checkout(pool)
+  File "/var/www/fluxocapital/venv/lib/python3.8/site-packages/sqlalchemy/pool/base.py", line 712, in checkout
+    rec = pool._do_get()
+  File "/var/www/fluxocapital/venv/lib/python3.8/site-packages/sqlalchemy/pool/impl.py", line 178, in _do_get
+    self._dec_overflow()
+  File "/var/www/fluxocapital/venv/lib/python3.8/site-packages/sqlalchemy/util/langhelpers.py", line 121, in __exit__
+    raise exc_value.with_traceback(exc_tb)
+  File "/var/www/fluxocapital/venv/lib/python3.8/site-packages/sqlalchemy/pool/impl.py", line 175, in _do_get
+    return self._create_connection()
+  File "/var/www/fluxocapital/venv/lib/python3.8/site-packages/sqlalchemy/pool/base.py", line 389, in _create_connection
+    return _ConnectionRecord(self)
+  File "/var/www/fluxocapital/venv/lib/python3.8/site-packages/sqlalchemy/pool/base.py", line 674, in __init__
+    self.__connect()
+  File "/var/www/fluxocapital/venv/lib/python3.8/site-packages/sqlalchemy/pool/base.py", line 901, in __connect
+    pool.logger.debug("Error on connect(): %s", e)
+  File "/var/www/fluxocapital/venv/lib/python3.8/site-packages/sqlalchemy/util/langhelpers.py", line 121, in __exit__
+    raise exc_value.with_traceback(exc_tb)
+  File "/var/www/fluxocapital/venv/lib/python3.8/site-packages/sqlalchemy/pool/base.py", line 896, in __connect
+    self.dbapi_connection = connection = pool._invoke_creator(self)
+  File "/var/www/fluxocapital/venv/lib/python3.8/site-packages/sqlalchemy/engine/create.py", line 667, in connect
+    return dialect.connect(*cargs_tup, **cparams)
+  File "/var/www/fluxocapital/venv/lib/python3.8/site-packages/sqlalchemy/engine/default.py", line 630, in connect
+    return self.loaded_dbapi.connect(*cargs, **cparams)  # type: ignore[no-any-return]  # NOQA: E501
+  File "/var/www/fluxocapital/venv/lib/python3.8/site-packages/mysql/connector/pooling.py", line 322, in connect
+    return CMySQLConnection(*args, **kwargs)
+  File "/var/www/fluxocapital/venv/lib/python3.8/site-packages/mysql/connector/connection_cext.py", line 151, in __init__
+    self.connect(**kwargs)
+  File "/var/www/fluxocapital/venv/lib/python3.8/site-packages/mysql/connector/abstracts.py", line 1399, in connect
+    self._open_connection()
+  File "/var/www/fluxocapital/venv/lib/python3.8/site-packages/mysql/connector/connection_cext.py", line 339, in _open_connection
+    raise get_mysql_exception(
+mysql.connector.errors.ProgrammingError: 1044 (42000): Access denied for user 'user_fluxocapital'@'localhost' to database 'db_fluxocapital'
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/var/www/fluxocapital/venv/lib/python3.8/site-packages/flask/app.py", line 1455, in wsgi_app
+    response = self.full_dispatch_request()
+  File "/var/www/fluxocapital/venv/lib/python3.8/site-packages/flask/app.py", line 869, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "/var/www/fluxocapital/venv/lib/python3.8/site-packages/flask/app.py", line 867, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "/var/www/fluxocapital/venv/lib/python3.8/site-packages/flask/app.py", line 852, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)
+  File "/var/www/fluxocapital/app.py", line 86, in decorated_function
+    response = f(*args, **kwargs)
+  File "/var/www/fluxocapital/app.py", line 363, in login
+    u = Usuario.query.filter_by(username=username).first()
+  File "/var/www/fluxocapital/venv/lib/python3.8/site-packages/sqlalchemy/orm/query.py", line 2759, in first
+    return self.limit(1)._iter().first()  # type: ignore
+  File "/var/www/fluxocapital/venv/lib/python3.8/site-packages/sqlalchemy/orm/query.py", line 2857, in _iter
+    result: Union[ScalarResult[_T], Result[_T]] = self.session.execute(
+  File "/var/www/fluxocapital/venv/lib/python3.8/site-packages/sqlalchemy/orm/session.py", line 2351, in execute
+    return self._execute_internal(
+  File "/var/www/fluxocapital/venv/lib/python3.8/site-packages/sqlalchemy/orm/session.py", line 2239, in _execute_internal
+    conn = self._connection_for_bind(bind)
+  File "/var/www/fluxocapital/venv/lib/python3.8/site-packages/sqlalchemy/orm/session.py", line 2108, in _connection_for_bind
+    return trans._connection_for_bind(engine, execution_options)
+  File "<string>", line 2, in _connection_for_bind
+  File "/var/www/fluxocapital/venv/lib/python3.8/site-packages/sqlalchemy/orm/state_changes.py", line 137, in _go
+    ret_value = fn(self, *arg, **kw)
+  File "/var/www/fluxocapital/venv/lib/python3.8/site-packages/sqlalchemy/orm/session.py", line 1187, in _connection_for_bind
+    conn = bind.connect()
+  File "/var/www/fluxocapital/venv/lib/python3.8/site-packages/sqlalchemy/engine/base.py", line 3293, in connect
+    return self._connection_cls(self)
+  File "/var/www/fluxocapital/venv/lib/python3.8/site-packages/sqlalchemy/engine/base.py", line 145, in __init__
+    Connection._handle_dbapi_exception_noconnection(
+  File "/var/www/fluxocapital/venv/lib/python3.8/site-packages/sqlalchemy/engine/base.py", line 2448, in _handle_dbapi_exception_noconnection
+    raise sqlalchemy_exception.with_traceback(exc_info[2]) from e
+  File "/var/www/fluxocapital/venv/lib/python3.8/site-packages/sqlalchemy/engine/base.py", line 143, in __init__
+    self._dbapi_connection = engine.raw_connection()
+  File "/var/www/fluxocapital/venv/lib/python3.8/site-packages/sqlalchemy/engine/base.py", line 3317, in raw_connection
+    return self.pool.connect()
+  File "/var/www/fluxocapital/venv/lib/python3.8/site-packages/sqlalchemy/pool/base.py", line 448, in connect
+    return _ConnectionFairy._checkout(self)
+  File "/var/www/fluxocapital/venv/lib/python3.8/site-packages/sqlalchemy/pool/base.py", line 1272, in _checkout
+    fairy = _ConnectionRecord.checkout(pool)
+  File "/var/www/fluxocapital/venv/lib/python3.8/site-packages/sqlalchemy/pool/base.py", line 712, in checkout
+    rec = pool._do_get()
+  File "/var/www/fluxocapital/venv/lib/python3.8/site-packages/sqlalchemy/pool/impl.py", line 178, in _do_get
+    self._dec_overflow()
+  File "/var/www/fluxocapital/venv/lib/python3.8/site-packages/sqlalchemy/util/langhelpers.py", line 121, in __exit__
+    raise exc_value.with_traceback(exc_tb)
+  File "/var/www/fluxocapital/venv/lib/python3.8/site-packages/sqlalchemy/pool/impl.py", line 175, in _do_get
+    return self._create_connection()
+  File "/var/www/fluxocapital/venv/lib/python3.8/site-packages/sqlalchemy/pool/base.py", line 389, in _create_connection
+    return _ConnectionRecord(self)
+  File "/var/www/fluxocapital/venv/lib/python3.8/site-packages/sqlalchemy/pool/base.py", line 674, in __init__
+    self.__connect()
+  File "/var/www/fluxocapital/venv/lib/python3.8/site-packages/sqlalchemy/pool/base.py", line 901, in __connect
+    pool.logger.debug("Error on connect(): %s", e)
+  File "/var/www/fluxocapital/venv/lib/python3.8/site-packages/sqlalchemy/util/langhelpers.py", line 121, in __exit__
+    raise exc_value.with_traceback(exc_tb)
+  File "/var/www/fluxocapital/venv/lib/python3.8/site-packages/sqlalchemy/pool/base.py", line 896, in __connect
+    self.dbapi_connection = connection = pool._invoke_creator(self)
+  File "/var/www/fluxocapital/venv/lib/python3.8/site-packages/sqlalchemy/engine/create.py", line 667, in connect
+    return dialect.connect(*cargs_tup, **cparams)
+  File "/var/www/fluxocapital/venv/lib/python3.8/site-packages/sqlalchemy/engine/default.py", line 630, in connect
+    return self.loaded_dbapi.connect(*cargs, **cparams)  # type: ignore[no-any-return]  # NOQA: E501
+  File "/var/www/fluxocapital/venv/lib/python3.8/site-packages/mysql/connector/pooling.py", line 322, in connect
+    return CMySQLConnection(*args, **kwargs)
+  File "/var/www/fluxocapital/venv/lib/python3.8/site-packages/mysql/connector/connection_cext.py", line 151, in __init__
+    self.connect(**kwargs)
+  File "/var/www/fluxocapital/venv/lib/python3.8/site-packages/mysql/connector/abstracts.py", line 1399, in connect
+    self._open_connection()
+  File "/var/www/fluxocapital/venv/lib/python3.8/site-packages/mysql/connector/connection_cext.py", line 339, in _open_connection
+    raise get_mysql_exception(
+sqlalchemy.exc.ProgrammingError: (mysql.connector.errors.ProgrammingError) 1044 (42000): Access denied for user 'user_fluxocapital'@'localhost' to database 'db_fluxocapital'
+(Background on this error at: https://sqlalche.me/e/20/f405)
+2026-03-06 15:57:13,107 INFO: USUÁRIO: leonardo | AÇÃO: Login de usuário [SUCESSO] (username: leonardo) | IP: 150.165.250.121
+2026-03-06 15:57:21,574 INFO: USUÁRIO: leonardo | AÇÃO: Logout de usuário | IP: 150.165.250.121
+2026-03-06 15:57:26,873 INFO: USUÁRIO: user1 | AÇÃO: Login de usuário [SUCESSO] (username: user1) | IP: 150.165.250.121
+2026-03-06 15:59:24,121 INFO: USUÁRIO: user1 | AÇÃO: Logout de usuário | IP: 150.165.250.121
+2026-03-06 15:59:31,951 INFO: USUÁRIO: user2 | AÇÃO: Login de usuário [SUCESSO] (username: user2) | IP: 150.165.250.121
+2026-03-06 16:00:56,716 INFO: USUÁRIO: user2 | AÇÃO: Logout de usuário | IP: 150.165.250.121
+2026-03-06 16:01:04,073 INFO: USUÁRIO: user1 | AÇÃO: Login de usuário [SUCESSO] (username: user1) | IP: 150.165.250.121
+2026-03-06 16:06:23,445 INFO: USUÁRIO: user1 | AÇÃO: Acesso/Alteração de Perfil (nova_senha: ********) | IP: 150.165.250.121
+2026-03-06 16:06:32,124 INFO: USUÁRIO: user1 | AÇÃO: Acesso/Alteração de Perfil (nova_senha: ********) | IP: 150.165.250.121
+2026-03-06 16:06:44,226 INFO: USUÁRIO: user1 | AÇÃO: Gestão de Usuários (action: reset_password, usuario_alvo: user2, nova_senha: ********) | IP: 150.165.250.121
+2026-03-06 16:06:48,725 INFO: USUÁRIO: user1 | AÇÃO: Gestão de Usuários (action: reset_password, usuario_alvo: user3, nova_senha: ********) | IP: 150.165.250.121
+2026-03-06 16:06:51,680 INFO: USUÁRIO: user1 | AÇÃO: Gestão de Usuários (action: reset_password, usuario_alvo: user4, nova_senha: ********) | IP: 150.165.250.121
+2026-03-06 16:06:54,408 INFO: USUÁRIO: user1 | AÇÃO: Gestão de Usuários (action: reset_password, usuario_alvo: admin, nova_senha: ********) | IP: 150.165.250.121
+2026-03-06 16:07:01,857 INFO: USUÁRIO: user1 | AÇÃO: Gestão de Usuários (action: update_perfil, usuario_alvo: admin) | IP: 150.165.250.121
+2026-03-06 16:07:05,990 INFO: USUÁRIO: user1 | AÇÃO: Gestão de Usuários (action: reset_password, usuario_alvo: admin, nova_senha: ********) | IP: 150.165.250.121
+2026-03-06 16:07:09,369 INFO: USUÁRIO: user1 | AÇÃO: Logout de usuário | IP: 150.165.250.121
+2026-03-06 16:07:18,463 INFO: USUÁRIO: admin | AÇÃO: Login de usuário [SUCESSO] (username: admin) | IP: 150.165.250.121
+2026-03-06 16:07:25,478 INFO: USUÁRIO: admin | AÇÃO: Gestão de Usuários (action: update_perfil, usuario_alvo: user1) | IP: 150.165.250.121
+2026-03-06 16:08:12,022 INFO: USUÁRIO: admin | AÇÃO: Logout de usuário | IP: 150.165.250.121
+2026-03-06 16:09:20,787 INFO: USUÁRIO: admin | AÇÃO: Login de usuário [SUCESSO] (username: admin) | IP: 150.165.155.6
+2026-03-06 16:09:40,585 INFO: USUÁRIO: admin | AÇÃO: Logout de usuário | IP: 150.165.155.6
+2026-03-06 16:11:06,774 INFO: USUÁRIO: admin | AÇÃO: Login de usuário [SUCESSO] (username: admin) | IP: 177.37.141.0
+2026-03-06 16:11:43,683 INFO: USUÁRIO: admin | AÇÃO: Logout de usuário | IP: 177.37.141.0
+2026-03-06 16:13:04,433 INFO: USUÁRIO: admin | AÇÃO: Login de usuário [SUCESSO] (username: admin) | IP: 150.165.155.6
+2026-03-06 16:52:54,043 INFO: USUÁRIO: admin | AÇÃO: Login de usuário [SUCESSO] (username: admin) | IP: 177.65.221.179
+2026-03-06 17:18:14,704 INFO: USUÁRIO: admin | AÇÃO: Login de usuário [SUCESSO] (username: admin) | IP: 177.37.140.168
+2026-03-06 21:45:13,391 INFO: USUÁRIO: admin | AÇÃO: Login de usuário [SUCESSO] (username: admin) | IP: 177.37.140.168
+2026-03-07 07:50:07,475 INFO: USUÁRIO: admin | AÇÃO: Login de usuário [SUCESSO] (username: admin) | IP: 177.37.140.168
+2026-03-07 07:50:38,104 INFO: USUÁRIO: admin | AÇÃO: Compra de Ativo (ticker: Tesouro Selic, quantidade: 1, preco_compra: 5000, cambio: 1.00, data: 2026-03-07) | IP: 177.37.140.168
+2026-03-07 07:52:14,363 INFO: --- Início da Atualização: 07/03/2026 07:52:14 ---
+2026-03-07 07:52:14,426 INFO: Corrigindo ticker com espaços: 'Tesouro Selic' -> 'TESOURO SELIC'
+2026-03-07 07:52:14,811 INFO: [CÂMBIO] USDBRL: R$ 5.2653
+2026-03-07 07:52:30,013 INFO: [VALE3] R$ 78.86
+2026-03-07 07:52:30,298 INFO: [HGLG11] R$ 158.33 | P/VP: 0.95
+2026-03-07 07:52:30,485 INFO: [BOVA11] R$ 175.89
+2026-03-07 07:52:45,669 INFO: [PETR4] R$ 42.11
+2026-03-07 07:52:45,914 INFO: --- Fim da Atualização: 07/03/2026 07:52:45 ---
+2026-03-07 08:09:12,533 INFO: USUÁRIO: admin | AÇÃO: Login de usuário [SUCESSO] (username: admin) | IP: 177.37.140.38
+2026-03-07 08:35:23,880 INFO: USUÁRIO: admin | AÇÃO: Login de usuário [SUCESSO] (username: admin) | IP: 177.37.140.168
