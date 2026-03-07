@@ -53,7 +53,7 @@ As credenciais padrão da aplicação são:
 Caso queira configurar automaticamente usando o padrão, basta executar o script fornecido interativamente (ele lhe pedirá apenas a senha de root do seu MySQL local):
 ```bash
 chmod +x iniciar_banco.sh
-./iniciar_banco.sh
+sudo ./iniciar_banco.sh
 ```
 
 *(Opcional) Caso prefira fazer manualmente via terminal:*
