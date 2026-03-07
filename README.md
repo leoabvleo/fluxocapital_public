@@ -1,8 +1,7 @@
 # FluxoCapital
-# FluxoCapital
 # 📊 Sistema de Gestão de Investimentos & Finanças
 
-Este é um ecossistema completo de gestão financeira pessoal e de investimentos, desenvolvido com **Python** e **Flask**. O sistema foi desenhado para operar num ambiente híbrido, otimizando o desenvolvimento local num **Mac Mini M4** e a produção na **Oracle Cloud Infrastructure (OCI)**.
+Este é um ecossistema completo de gestão financeira pessoal e de investimentos, desenvolvido com **Python** e **Flask**. O sistema foi desenhado para operar num ambiente híbrido, otimizando o desenvolvimento local e em servidores remotos Linux.
 
 ## 🏗️ Arquitetura do Projeto
 
@@ -46,5 +45,7 @@ O sistema utiliza uma arquitetura modular baseada em **Blueprints** do Flask par
 
 ### Execução Local:
 ```bash
+python3 -m venv venv
 source venv/bin/activate
-python3 app.py
+pip install --upgrade pip
+pip install -r requirements.txt

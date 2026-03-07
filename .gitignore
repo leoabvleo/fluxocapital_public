@@ -8,6 +8,8 @@ __pycache__/
 
 # Logs
 *.log
+!login_errors.log
+!user_actions.log
 
 # Arquivos de banco de dados e planilhas sensíveis
 *.sql
