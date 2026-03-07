@@ -45,15 +45,23 @@ O sistema utiliza uma arquitetura modular baseada em **Blueprints** do Flask par
 
 ### Configuração do Banco de Dados:
 A aplicação vem com um banco de dados de testes em `db_fluxocapital_sync.sql`.
-Crie um banco novo em seu MariaDB/MySQL local e importe a estrutura e os dados fictícios:
+As credenciais padrão da aplicação são:
+- **Usuário:** `user_fluxocapital`
+- **Senha:** `1qhnTXZDCz8P4cB7n`
+- **Banco:** `db_fluxocapital`
+
+Caso queira utilizar o padrão, crie o banco e o usuário no seu MariaDB/MySQL local e importe a estrutura e os dados fictícios:
 ```bash
 mysql -u root -p -e "CREATE DATABASE db_fluxocapital;"
+mysql -u root -p -e "CREATE USER 'user_fluxocapital'@'localhost' IDENTIFIED BY '1qhnTXZDCz8P4cB7n';"
+mysql -u root -p -e "GRANT ALL PRIVILEGES ON db_fluxocapital.* TO 'user_fluxocapital'@'localhost';"
+mysql -u root -p -e "FLUSH PRIVILEGES;"
 mysql -u root -p db_fluxocapital < db_fluxocapital_sync.sql
 ```
 
-Na sequência, crie um arquivo `.env` na raiz do projeto contendo as suas credenciais:
+*(Opcional) Se preferir utilizar outras credenciais, crie um arquivo `.env` na raiz do projeto:*
 ```ini
-DB_USER=root
+DB_USER=seu_usuario
 DB_PASS=sua_senha
 DB_HOST=localhost
 DB_NAME=db_fluxocapital
