@@ -43,7 +43,18 @@ $MYSQL_CMD -e "GRANT ALL PRIVILEGES ON db_fluxocapital.* TO 'user_fluxocapital'@
 echo "[4/5] Atualizando privilégios..."
 $MYSQL_CMD -e "FLUSH PRIVILEGES;"
 
-echo "[5/5] Importando dados de teste do arquivo db_fluxocapital_sync.sql..."
+echo "[5/5] Criando arquivo .env de configuração local..."
+if [ ! -f ".env" ]; then
+    echo "DB_USER=user_fluxocapital" > .env
+    echo "DB_PASS=1qhnTXZDCz8P4cB7n" >> .env
+    echo "DB_HOST=localhost" >> .env
+    echo "DB_NAME=db_fluxocapital" >> .env
+    echo "✅ Arquivo .env criado com as credenciais padrão!"
+else
+    echo "ℹ️  Arquivo .env já existe, mantendo as configurações atuais."
+fi
+
+echo "[6/6] Importando dados de teste do arquivo db_fluxocapital_sync.sql..."
 if [ -f "db_fluxocapital_sync.sql" ]; then
     if $MYSQL_CMD -D db_fluxocapital < db_fluxocapital_sync.sql; then
         echo ""
