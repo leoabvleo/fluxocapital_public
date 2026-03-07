@@ -1,2 +1,41 @@
+# Virtual Environment
 venv/
+.env
+
+# Python Cache
+__pycache__/
+*.py[cod]
+
+# Logs
+*.log
+
+# Arquivos de banco de dados e planilhas sensíveis
+*.sql
+*.xlsx
+*.sqlite
+*.sqlite3
+*.db
+
+# PHP scripts sensíveis e index local
+adminer.php
 index.php
+
+# Scripts Shell de infra/manutenção locais
+*db*.sh
+monitorar_*.sh
+gerar-painel-bloqueios.sh
+git_sync.sh
+
+# Scripts temporários de correção de banco/migração
+add_perfil_column.py
+alter_table.py
+create_carteira_table.py
+create_categoria_ativos.py
+create_usuario_carteira*.py
+migrate_*.py
+migration_*.py
+update_div_categories_manual.py
+update_knip_div.py
+verify_proventos.py
+query_db.py
+reset_password.py
