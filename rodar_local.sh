@@ -21,8 +21,8 @@ source venv/bin/activate
 
 # 3. Verifica/Instala dependências
 echo "🛠️  Verificando dependências..."
-pip install --upgrade pip > /dev/null
-pip install -r requirements.txt | grep -v 'already satisfied'
+./venv/bin/pip install --upgrade pip > /dev/null
+./venv/bin/pip install -r requirements.txt | grep -v 'already satisfied'
 
 # 4. Verifica se o banco já foi configurado (.env existe)
 if [ ! -f ".env" ]; then
@@ -42,4 +42,5 @@ echo "Senha: 8mH29DAC"
 echo "================================================="
 echo ""
 
-python3 app.py
+# Usa o python do venv diretamente para evitar problemas de ativação
+./venv/bin/python3 app.py
