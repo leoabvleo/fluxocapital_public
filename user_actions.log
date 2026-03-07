@@ -1,1 +1,23 @@
 
+2026-03-07 15:09:59,420 - USUÁRIO: admin | AÇÃO: Login de usuário [FALHA] (username: admin) | IP: 127.0.0.1
+2026-03-07 15:10:35,852 - USUÁRIO: admin | AÇÃO: Login de usuário [FALHA] (username: admin) | IP: 127.0.0.1
+2026-03-07 15:10:44,522 - USUÁRIO: admin | AÇÃO: Login de usuário [FALHA] (username: admin) | IP: 127.0.0.1
+2026-03-07 15:12:32,385 - USUÁRIO: admin | AÇÃO: Login de usuário [FALHA] (username: admin) | IP: 127.0.0.1
+2026-03-07 15:14:11,752 - USUÁRIO: admin | AÇÃO: Login de usuário [FALHA] (username: admin) | IP: 127.0.0.1
+2026-03-07 15:14:22,658 - USUÁRIO: admin | AÇÃO: Login de usuário [FALHA] (username: admin) | IP: 127.0.0.1
+2026-03-07 15:14:28,762 - USUÁRIO: leonardo | AÇÃO: Login de usuário [SUCESSO] (username: leonardo) | IP: 127.0.0.1
+2026-03-07 15:15:33,497 - USUÁRIO: leonardo | AÇÃO: Logout de usuário | IP: 127.0.0.1
+2026-03-07 15:15:47,576 - USUÁRIO: leonardo | AÇÃO: Login de usuário [SUCESSO] (username: leonardo) | IP: 127.0.0.1
+2026-03-07 15:15:50,144 - USUÁRIO: leonardo | AÇÃO: Logout de usuário | IP: 127.0.0.1
+2026-03-07 15:18:09,066 - USUÁRIO: leonardo | AÇÃO: Login de usuário [SUCESSO] (username: leonardo) | IP: 127.0.0.1
+2026-03-07 15:18:27,826 - USUÁRIO: leonardo | AÇÃO: Login de usuário [SUCESSO] (username: leonardo) | IP: 127.0.0.1
+2026-03-07 15:22:23,754 - USUÁRIO: leonardo | AÇÃO: Gestão de Usuários (username: sdfsdf, action: cadastrar) | IP: 127.0.0.1
+2026-03-07 15:22:27,766 - USUÁRIO: leonardo | AÇÃO: Gestão de Usuários (action: update_perfil, usuario_alvo: sdfsdf) | IP: 127.0.0.1
+2026-03-07 15:38:37,610 - USUÁRIO: admin | AÇÃO: Logout de usuário | IP: 127.0.0.1
+2026-03-07 15:42:32,337 - USUÁRIO: leonardo | AÇÃO: Login de usuário [SUCESSO] (username: leonardo) | IP: 127.0.0.1
+2026-03-07 15:42:35,003 - USUÁRIO: leonardo | AÇÃO: Logout de usuário | IP: 127.0.0.1
+2026-03-07 15:45:29,114 - USUÁRIO: admin | AÇÃO: Login de usuário [SUCESSO] (username: admin) | IP: 127.0.0.1
+2026-03-07 15:48:21,732 - USUÁRIO: admin | AÇÃO: Logout de usuário | IP: 127.0.0.1
+2026-03-07 15:48:27,426 - USUÁRIO: 8mH29DAC | AÇÃO: Login de usuário [FALHA] (username: 8mH29DAC) | IP: 127.0.0.1
+2026-03-07 15:48:32,697 - USUÁRIO: admin | AÇÃO: Login de usuário [SUCESSO] (username: admin) | IP: 127.0.0.1
+2026-03-07 15:54:53,602 - USUÁRIO: leonardo | AÇÃO: Logout de usuário | IP: 127.0.0.1
