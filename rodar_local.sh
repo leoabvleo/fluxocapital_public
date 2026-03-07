@@ -36,6 +36,9 @@ fi
 echo ""
 echo "🚀 Iniciando o sistema..."
 echo "📡 Acesse: http://localhost:5001"
+echo "Credenciais de Teste:"
+echo "Usuário: admin"
+echo "Senha: 8mH29DAC"
 echo "================================================="
 echo ""
 
