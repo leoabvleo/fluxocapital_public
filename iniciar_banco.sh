@@ -28,9 +28,15 @@ mysql -u root -p"$MYSQL_ROOT_PASSWORD" -e "FLUSH PRIVILEGES;"
 
 echo "[5/5] Importando dados de teste do arquivo db_fluxocapital_sync.sql..."
 if [ -f "db_fluxocapital_sync.sql" ]; then
-    mysql -u root -p"$MYSQL_ROOT_PASSWORD" db_fluxocapital < db_fluxocapital_sync.sql
-    echo ""
-    echo "✅ Banco de dados configurado e populado com sucesso!"
+    # Usando -D para especificar o banco de dados de forma mais robusta
+    if mysql -u root -p"$MYSQL_ROOT_PASSWORD" -D db_fluxocapital < db_fluxocapital_sync.sql; then
+        echo ""
+        echo "✅ Banco de dados configurado e populado com sucesso!"
+    else
+        echo ""
+        echo "❌ Erro ao importar os dados do arquivo .sql!"
+        exit 1
+    fi
 else
     echo "❌ Erro: Arquivo db_fluxocapital_sync.sql não encontrado no diretório atual!"
     exit 1
