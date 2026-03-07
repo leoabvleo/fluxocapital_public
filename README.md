@@ -50,7 +50,13 @@ As credenciais padrão da aplicação são:
 - **Senha:** `1qhnTXZDCz8P4cB7n`
 - **Banco:** `db_fluxocapital`
 
-Caso queira utilizar o padrão, crie o banco e o usuário no seu MariaDB/MySQL local e importe a estrutura e os dados fictícios:
+Caso queira configurar automaticamente usando o padrão, basta executar o script fornecido interativamente (ele lhe pedirá apenas a senha de root do seu MySQL local):
+```bash
+chmod +x iniciar_banco.sh
+./iniciar_banco.sh
+```
+
+*(Opcional) Caso prefira fazer manualmente via terminal:*
 ```bash
 mysql -u root -p -e "CREATE DATABASE db_fluxocapital;"
 mysql -u root -p -e "CREATE USER 'user_fluxocapital'@'localhost' IDENTIFIED BY '1qhnTXZDCz8P4cB7n';"
