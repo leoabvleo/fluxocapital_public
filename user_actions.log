@@ -29,3 +29,12 @@
 2026-03-07 07:50:38,104 - USUÁRIO: admin | AÇÃO: Compra de Ativo (ticker: Tesouro Selic, quantidade: 1, preco_compra: 5000, cambio: 1.00, data: 2026-03-07) | IP: 177.37.140.168
 2026-03-07 08:09:12,533 - USUÁRIO: admin | AÇÃO: Login de usuário [SUCESSO] (username: admin) | IP: 177.37.140.38
 2026-03-07 08:35:23,880 - USUÁRIO: admin | AÇÃO: Login de usuário [SUCESSO] (username: admin) | IP: 177.37.140.168
+2026-03-07 13:02:53,793 - USUÁRIO: leonardo | AÇÃO: Login de usuário [SUCESSO] (username: leonardo) | IP: 127.0.0.1
+2026-03-07 13:06:41,389 - USUÁRIO: leonardo | AÇÃO: Acesso/Alteração de Perfil (nova_senha: ********) | IP: 127.0.0.1
+2026-03-07 13:06:54,296 - USUÁRIO: leonardo | AÇÃO: Logout de usuário | IP: 127.0.0.1
+2026-03-07 13:06:59,771 - USUÁRIO: admin | AÇÃO: Login de usuário [SUCESSO] (username: admin) | IP: 127.0.0.1
+2026-03-07 13:07:08,437 - USUÁRIO: admin | AÇÃO: Gestão de Usuários (action: update_perfil, usuario_alvo: leonardo) | IP: 127.0.0.1
+2026-03-07 13:07:17,659 - USUÁRIO: admin | AÇÃO: Logout de usuário | IP: 127.0.0.1
+2026-03-07 13:07:22,262 - USUÁRIO: leonardo | AÇÃO: Login de usuário [SUCESSO] (username: leonardo) | IP: 127.0.0.1
+2026-03-07 13:07:32,425 - USUÁRIO: leonardo | AÇÃO: Logout de usuário | IP: 127.0.0.1
+2026-03-07 13:08:59,105 - USUÁRIO: admin | AÇÃO: Login de usuário [SUCESSO] (username: admin) | IP: 127.0.0.1

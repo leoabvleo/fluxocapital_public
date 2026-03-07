@@ -13,5 +13,5 @@ echo "🚀 Iniciando sistema com MySQL local (db_fluxocapital)..."
 echo "📡 Acesse: http://127.0.0.1:5001"
 echo ""
 
-source .venv/bin/activate
+source venv/bin/activate
 python3 app.py
