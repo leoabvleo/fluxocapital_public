@@ -43,9 +43,32 @@ O sistema utiliza uma arquitetura modular baseada em **Blueprints** do Flask par
 - MariaDB / MySQL
 - Dependências listadas em `requirements.txt`
 
+### Configuração do Banco de Dados:
+A aplicação vem com um banco de dados de testes em `db_fluxocapital_sync.sql`.
+Crie um banco novo em seu MariaDB/MySQL local e importe a estrutura e os dados fictícios:
+```bash
+mysql -u root -p -e "CREATE DATABASE db_fluxocapital;"
+mysql -u root -p db_fluxocapital < db_fluxocapital_sync.sql
+```
+
+Na sequência, crie um arquivo `.env` na raiz do projeto contendo as suas credenciais:
+```ini
+DB_USER=root
+DB_PASS=sua_senha
+DB_HOST=localhost
+DB_NAME=db_fluxocapital
+```
+
 ### Execução Local:
 ```bash
+# Crie e ative seu ambiente virtual
 python3 -m venv venv
 source venv/bin/activate
+
+# Instale as dependências
 pip install --upgrade pip
 pip install -r requirements.txt
+
+# Execute a aplicação
+python3 app.py
+```
