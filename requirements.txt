@@ -10,3 +10,4 @@ PyPDF2
 numpy<2
 werkzeug
 sqlalchemy
+python-dotenv
