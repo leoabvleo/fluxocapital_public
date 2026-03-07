@@ -1,17 +1,42 @@
 #!/bin/bash
-# Script para rodar o sistema localmente com MySQL (MariaDB)
 
+# Script automatizado para configurar e rodar o FluxoCapital localmente
+
+echo "================================================="
+echo "      Iniciando FluxoCapital (Local)             "
+echo "================================================="
+
+# Muda para o diretório do script
 cd "$(dirname "$0")"
 
-export DB_TYPE=mysql
-export DB_USER=user_fluxocapital
-export DB_PASS=1qhnTXZDCz8P4cB7n
-export DB_HOST=localhost
-export DB_NAME=db_fluxocapital
+# 1. Verifica/Cria ambiente virtual (venv)
+if [ ! -d "venv" ]; then
+    echo "📦 Criando ambiente virtual (venv)..."
+    python3 -m venv venv
+fi
 
-echo "🚀 Iniciando sistema com MySQL local (db_fluxocapital)..."
-echo "📡 Acesse: http://127.0.0.1:5001"
+# 2. Ativa o ambiente virtual
+echo "🔋 Ativando ambiente virtual..."
+source venv/bin/activate
+
+# 3. Verifica/Instala dependências
+echo "🛠️  Verificando dependências..."
+pip install --upgrade pip > /dev/null
+pip install -r requirements.txt | grep -v 'already satisfied'
+
+# 4. Verifica se o banco já foi configurado (.env existe)
+if [ ! -f ".env" ]; then
+    echo ""
+    echo "🚨 ATENÇÃO: O arquivo .env não foi encontrado!"
+    echo "💡 Lembre-se de rodar './iniciar_banco.sh' primeiro para configurar o banco de dados."
+    echo ""
+fi
+
+# 5. Roda a aplicação
+echo ""
+echo "🚀 Iniciando o sistema..."
+echo "📡 Acesse: http://localhost:5001"
+echo "================================================="
 echo ""
 
-source venv/bin/activate
 python3 app.py

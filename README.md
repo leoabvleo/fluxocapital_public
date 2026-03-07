@@ -67,6 +67,13 @@ mysql -u root -p db_fluxocapital < db_fluxocapital_sync.sql
 
 
 ### Execução Local:
+Para simplificar, já fornecemos um script que cria o ambiente virtual, instala as dependências e inicia a aplicação automaticamente:
+```bash
+chmod +x rodar_local.sh
+./rodar_local.sh
+```
+
+*(Opcional) Caso prefira realizar os passos manualmente:*
 ```bash
 # Crie e ative seu ambiente virtual
 python3 -m venv venv
