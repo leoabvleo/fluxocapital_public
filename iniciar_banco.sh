@@ -81,3 +81,4 @@ else
     echo "❌ Erro: Arquivo db_fluxocapital_sync.sql não encontrado no diretório atual!"
     exit 1
 fi
+
