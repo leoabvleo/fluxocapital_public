@@ -1,6 +1,7 @@
 from flask import Blueprint, render_template, request, redirect, url_for, flash, session
 from flask_login import login_required, current_user
 from auth import admin_required, is_superadmin
+from utils import log_action
 from extensions import db
 from models import Funcionario, FuncionarioLancamento, FolhaPagamento, Transacao, Categoria, Carteira
 from datetime import datetime, date
@@ -112,6 +113,7 @@ def funcionarios():
 @funcionarios_bp.route('/funcionarios/add', methods=['POST'])
 @login_required
 @admin_required
+@log_action("Cadastro de Funcionário")
 def add_funcionario():
     nome = request.form.get('nome', '').strip()
     cpf = request.form.get('cpf', '').strip() or None
@@ -152,6 +154,7 @@ def add_funcionario():
 @funcionarios_bp.route('/funcionarios/<int:id>/toggle', methods=['POST'])
 @login_required
 @admin_required
+@log_action("Ativação/Desativação de Funcionário")
 def toggle_funcionario(id):
     func = get_funcionarios_query().filter_by(id=id).first_or_404()
     func.ativo = not func.ativo
@@ -164,6 +167,7 @@ def toggle_funcionario(id):
 @funcionarios_bp.route('/funcionarios/<int:id>/edit', methods=['POST'])
 @login_required
 @admin_required
+@log_action("Edição de Funcionário")
 def edit_funcionario(id):
     func = get_funcionarios_query().filter_by(id=id).first_or_404()
     nome = request.form.get('nome', '').strip()
@@ -300,6 +304,7 @@ def extrato(id):
 @funcionarios_bp.route('/funcionarios/<int:id>/lancamentos/add', methods=['POST'])
 @login_required
 @admin_required
+@log_action("Lançamento deRH")
 def add_lancamento(id):
     func = get_funcionarios_query().filter_by(id=id).first_or_404()
     tipo = request.form.get('tipo', 'Adiantamento')
@@ -336,6 +341,7 @@ def add_lancamento(id):
 @funcionarios_bp.route('/funcionarios/lancamentos/<int:id>/edit', methods=['POST'])
 @login_required
 @admin_required
+@log_action("Edição de Lançamento RH")
 def edit_lancamento(id):
     lanc = FuncionarioLancamento.query.get_or_404(id)
     # Garante que o funcionário pertence à carteira ativa
@@ -370,6 +376,7 @@ def edit_lancamento(id):
 @funcionarios_bp.route('/funcionarios/lancamentos/<int:id>/delete', methods=['POST'])
 @login_required
 @admin_required
+@log_action("Exclusão de Lançamento RH")
 def delete_lancamento(id):
     lanc = FuncionarioLancamento.query.get_or_404(id)
     # Verifica que o funcionário pertence à carteira acessível
@@ -470,6 +477,7 @@ def folha():
 @funcionarios_bp.route('/funcionarios/folha/fechar', methods=['POST'])
 @login_required
 @admin_required
+@log_action("Fechamento de Folha de Pagamento")
 def fechar_folha():
     mes_sel = int(request.form.get('mes', date.today().month))
     ano_sel = int(request.form.get('ano', date.today().year))
@@ -548,6 +556,7 @@ def fechar_folha():
 @funcionarios_bp.route('/funcionarios/folha/reabrir', methods=['POST'])
 @login_required
 @admin_required
+@log_action("Reabertura de Folha de Pagamento")
 def reabrir_folha():
     mes_sel = int(request.form.get('mes', date.today().month))
     ano_sel = int(request.form.get('ano', date.today().year))
@@ -583,6 +592,7 @@ def reabrir_folha():
 @funcionarios_bp.route('/funcionarios/folha/<int:id>/pagar', methods=['POST'])
 @login_required
 @admin_required
+@log_action("Pagamento de Salário")
 def pagar_folha(id):
     folha_obj = FolhaPagamento.query.get_or_404(id)
     # Verifica que o funcionário pertence à carteira acessível
@@ -665,6 +675,7 @@ def pagar_folha(id):
 @funcionarios_bp.route('/funcionarios/folha/<int:id>/desfazer_pagamento', methods=['POST'])
 @login_required
 @admin_required
+@log_action("Estorno de Pagamento de Salário")
 def desfazer_pagamento(id):
     folha_obj = FolhaPagamento.query.get_or_404(id)
     get_funcionarios_query().filter_by(id=folha_obj.funcionario_id).first_or_404()

@@ -33,10 +33,9 @@ app.config['SQLALCHEMY_DATABASE_URI'] = f'mysql+mysqlconnector://{db_user}:{db_p
 
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
-# --- CONFIGURAÇÃO DE LOG ---
-base_dir = os.path.abspath(os.path.dirname(__file__))
-log_file = os.path.join(base_dir, 'login_errors.log')
-actions_log_file = os.path.join(base_dir, 'user_actions.log')
+from auth import admin_required, superadmin_required, is_superadmin, is_admin_or_superadmin
+from utils import get_current_wallet, get_authorized_query, log_action, log_file, actions_log_file, user_logger
+import logging
 
 # Logger para erros e avisos do sistema/login
 logging.basicConfig(
@@ -45,96 +44,6 @@ logging.basicConfig(
     handlers=[logging.FileHandler(log_file, mode='a', encoding='utf-8'), logging.StreamHandler()],
     force=True 
 )
-
-# Logger dedicado para ações do usuário
-user_logger = logging.getLogger('user_actions')
-user_logger.setLevel(logging.INFO)
-action_handler = logging.FileHandler(actions_log_file, mode='a', encoding='utf-8')
-action_handler.setFormatter(logging.Formatter('%(asctime)s - %(message)s'))
-user_logger.addHandler(action_handler)
-
-def log_action(message_template):
-    from functools import wraps
-    def decorator(f):
-        @wraps(f)
-        def decorated_function(*args, **kwargs):
-            # Captura informações ANTES da execução (deleções e logout)
-            pre_username = current_user.username if (current_user and current_user.is_authenticated) else None
-            pre_details = []
-            is_deletion = f.__name__.startswith('deletar')
-            
-            if is_deletion and 'id' in kwargs:
-                item_id = kwargs['id']
-                try:
-                    if 'venda' in f.__name__:
-                        v = Venda.query.get(item_id)
-                        if v: pre_details.append(f"Ticker: {v.ticker}")
-                    elif 'dividendo' in f.__name__:
-                        d = Dividendo.query.get(item_id)
-                        if d: pre_details.append(f"Ticker: {d.ticker}")
-                    else: # Ativo
-                        a = Ativo.query.get(item_id)
-                        if a: pre_details.append(f"Ticker: {a.ticker}")
-                except Exception as e:
-                    logging.error(f"Erro pre-log deleção: {e}")
-                
-                if not pre_details:
-                    pre_details.append(f"ID: {item_id}")
-
-            # Executa a função
-            response = f(*args, **kwargs)
-
-            # Logar somente após execução bem sucedida (ou conforme regras)
-            try:
-                if request.method == 'POST' or is_deletion or 'logout' in f.__name__:
-                    # Determina o nome do usuário (trata logout e falha de login)
-                    authenticated = (current_user and current_user.is_authenticated)
-                    username = pre_username or (current_user.username if authenticated else request.form.get('username') or "Anônimo")
-                    ip = request.remote_addr
-
-                    # Status para Login
-                    msg = message_template
-                    if f.__name__ == 'login' and request.method == 'POST':
-                        msg += " [SUCESSO]" if authenticated else " [FALHA]"
-                    
-                    details = []
-                    details.extend(pre_details)
-                    
-                    # Campos do formulário (apenas se for POST)
-                    if request.method == 'POST':
-                        # Captura filename se houver arquivo no request
-                        if request.files:
-                            for file_key in request.files:
-                                f_obj = request.files[file_key]
-                                if f_obj and f_obj.filename:
-                                    details.append(f"arquivo: {f_obj.filename}")
-
-                        for key in ['id', 'ticker', 'quantidade', 'preco_compra', 'cambio', 'categoria', 'data', 'valor', 'tipo', 'username', 'action', 'user_id', 'nova_senha', 'tipo_relatorio']:
-                            val = request.form.get(key)
-                            if val:
-                                if key == 'user_id':
-                                    try:
-                                        target_user = Usuario.query.get(val)
-                                        if target_user:
-                                            details.append(f"usuario_alvo: {target_user.username}")
-                                            continue
-                                    except: pass
-                                
-                                if key == 'nova_senha': val = "********"
-                                details.append(f"{key}: {val}")
-                    
-                    detail_str = f" ({', '.join(details)})" if details else ""
-                    user_logger.info(f"USUÁRIO: {username} | AÇÃO: {msg}{detail_str} | IP: {ip}")
-            except Exception as e:
-                # Loga erro no log do sistema para debug, mas não quebra a requisição do usuário
-                logging.error(f"Erro no log_action para {f.__name__}: {e}")
-                
-            return response
-        return decorated_function
-    return decorator
-
-from auth import admin_required, superadmin_required, is_superadmin, is_admin_or_superadmin
-from utils import get_current_wallet, get_authorized_query
 
 from extensions import db, login_manager
 from models import Usuario, Ativo, Venda, Dividendo, Categoria, Transacao, CategoriaAtivo, CategoriaProvento, Carteira, PerfilUsuario

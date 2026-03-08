@@ -1,6 +1,7 @@
 from flask import Blueprint, render_template, request, redirect, url_for, flash, session, jsonify
 from flask_login import login_required, current_user
 from auth import admin_required, is_superadmin
+from utils import get_authorized_query, log_action
 from extensions import db
 from models import Transacao, Categoria, ConfigFinanceiraFixa, Ativo, Dividendo, GastoCartao, Carteira
 from datetime import datetime, date
@@ -235,6 +236,7 @@ def dashboard():
 @finance_bp.route('/financas/transacao/update_valor', methods=['POST'])
 @login_required
 @admin_required
+@log_action("Atualização de Transação")
 def update_valor():
     t_id = request.form.get('id')
     campo = request.form.get('campo') # 'valor_previsto', 'valor_pago', 'data' ou 'descricao'
@@ -281,6 +283,7 @@ def update_valor():
 @finance_bp.route('/financas/transacao/add', methods=['POST'])
 @login_required
 @admin_required
+@log_action("Adição de Transação")
 def add_transacao():
     data_str = request.form.get('data')
     descricao = request.form.get('descricao')
@@ -321,6 +324,7 @@ def add_transacao():
 @finance_bp.route('/financas/transacao/delete/<int:id>', methods=['POST'])
 @login_required
 @admin_required
+@log_action("Exclusão de Transação")
 def delete_transacao(id):
     t = Transacao.query.get_or_404(id)
     
@@ -578,6 +582,7 @@ def config_fixas():
 @finance_bp.route('/financas/config_fixas/add', methods=['POST'])
 @login_required
 @admin_required
+@log_action("Adição de Configuração Fixa")
 def add_config_fixa():
     descricao = request.form.get('descricao')
     valor_estimado = request.form.get('valor_estimado').replace(',', '.')
@@ -608,6 +613,7 @@ def add_config_fixa():
 @finance_bp.route('/financas/config_fixas/update', methods=['POST'])
 @login_required
 @admin_required
+@log_action("Atualização de Configuração Fixa")
 def update_config_fixa():
     cfg_id = request.form.get('id')
     campo = request.form.get('campo')
@@ -641,6 +647,7 @@ def update_config_fixa():
 @finance_bp.route('/financas/config_fixas/delete/<int:id>', methods=['POST'])
 @login_required
 @admin_required
+@log_action("Exclusão de Configuração Fixa")
 def delete_config_fixa(id):
     cfg = ConfigFinanceiraFixa.query.get_or_404(id)
     db.session.delete(cfg)
@@ -664,6 +671,7 @@ def categorias():
 @finance_bp.route('/financas/categorias/add', methods=['POST'])
 @login_required
 @admin_required
+@log_action("Adição de Categoria")
 def add_categoria():
     nome = request.form.get('nome')
     tipo = request.form.get('tipo', 'Despesa')
@@ -699,6 +707,7 @@ def add_categoria():
 @finance_bp.route('/financas/categorias/update', methods=['POST'])
 @login_required
 @admin_required
+@log_action("Atualização de Categoria")
 def update_categoria():
     cat_id = request.form.get('id')
     campo = request.form.get('campo')
@@ -733,6 +742,7 @@ def update_categoria():
 @finance_bp.route('/financas/categorias/delete/<int:id>', methods=['POST'])
 @login_required
 @admin_required
+@log_action("Exclusão de Categoria")
 def delete_categoria(id):
     cat = Categoria.query.get_or_404(id)
     
@@ -758,6 +768,7 @@ def delete_categoria(id):
 @finance_bp.route('/financas/cartao/import', methods=['POST'])
 @login_required
 @admin_required
+@log_action("Importação de Fatura de Cartão")
 def import_cartao():
     if 'file' not in request.files:
         flash('Nenhum arquivo enviado', 'danger')

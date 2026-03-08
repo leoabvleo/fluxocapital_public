@@ -246,3 +246,93 @@
 2026-03-08 20:21:33,884 INFO:  * Detected change in '/private/var/www/fluxocapital_public/card_parser.py', reloading
 2026-03-08 20:21:34,603 WARNING:  * Debugger is active!
 2026-03-08 20:21:34,607 INFO:  * Debugger PIN: 866-719-685
+2026-03-08 20:22:41,583 INFO: USUÁRIO: admin | AÇÃO: Login de usuário [SUCESSO] (username: admin) | IP: 127.0.0.1
+2026-03-08 20:22:41,584 INFO: 127.0.0.1 - - [08/Mar/2026 20:22:41] "[32mPOST /login HTTP/1.1[0m" 302 -
+2026-03-08 20:22:41,614 INFO: 127.0.0.1 - - [08/Mar/2026 20:22:41] "GET / HTTP/1.1" 200 -
+2026-03-08 20:22:41,644 INFO: 127.0.0.1 - - [08/Mar/2026 20:22:41] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2026-03-08 20:22:47,947 INFO: 127.0.0.1 - - [08/Mar/2026 20:22:47] "GET /financas HTTP/1.1" 200 -
+2026-03-08 20:22:47,969 INFO: 127.0.0.1 - - [08/Mar/2026 20:22:47] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2026-03-08 20:23:18,862 INFO: 127.0.0.1 - - [08/Mar/2026 20:23:18] "[32mPOST /financas/transacao/add HTTP/1.1[0m" 302 -
+2026-03-08 20:23:18,880 INFO: 127.0.0.1 - - [08/Mar/2026 20:23:18] "GET /financas?mes=3&ano=2026 HTTP/1.1" 200 -
+2026-03-08 20:23:18,896 INFO: 127.0.0.1 - - [08/Mar/2026 20:23:18] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2026-03-08 20:24:47,595 INFO:  * Detected change in '/private/var/www/fluxocapital_public/utils.py', reloading
+2026-03-08 20:24:48,347 WARNING:  * Debugger is active!
+2026-03-08 20:24:48,351 INFO:  * Debugger PIN: 866-719-685
+2026-03-08 20:24:58,593 INFO: 127.0.0.1 - - [08/Mar/2026 20:24:58] "GET / HTTP/1.1" 200 -
+2026-03-08 20:24:58,616 INFO: 127.0.0.1 - - [08/Mar/2026 20:24:58] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2026-03-08 20:24:59,604 INFO:  * Detected change in '/private/var/www/fluxocapital_public/app.py', reloading
+2026-03-08 20:25:08,053 WARNING:  * Debugger is active!
+2026-03-08 20:25:08,058 INFO:  * Debugger PIN: 866-719-685
+2026-03-08 20:25:19,314 INFO:  * Detected change in '/private/var/www/fluxocapital_public/finance.py', reloading
+2026-03-08 20:25:19,905 WARNING:  * Debugger is active!
+2026-03-08 20:25:19,910 INFO:  * Debugger PIN: 866-719-685
+2026-03-08 20:25:31,128 INFO:  * Detected change in '/private/var/www/fluxocapital_public/funcionarios.py', reloading
+2026-03-08 20:25:31,746 WARNING:  * Debugger is active!
+2026-03-08 20:25:31,750 INFO:  * Debugger PIN: 866-719-685
+2026-03-08 20:26:35,034 INFO:  * Detected change in '/private/var/www/fluxocapital_public/app.py', reloading
+2026-03-08 20:26:35,740 WARNING:  * Debugger is active!
+2026-03-08 20:26:35,745 INFO:  * Debugger PIN: 866-719-685
+2026-03-08 20:26:51,047 INFO:  * Detected change in '/private/var/www/fluxocapital_public/utils.py', reloading
+2026-03-08 20:26:51,650 WARNING:  * Debugger is active!
+2026-03-08 20:26:51,656 INFO:  * Debugger PIN: 866-719-685
+2026-03-08 20:27:27,422 INFO: 127.0.0.1 - - [08/Mar/2026 20:27:27] "GET / HTTP/1.1" 200 -
+2026-03-08 20:27:27,453 INFO: 127.0.0.1 - - [08/Mar/2026 20:27:27] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2026-03-08 20:27:28,934 INFO: 127.0.0.1 - - [08/Mar/2026 20:27:28] "GET /financas HTTP/1.1" 200 -
+2026-03-08 20:27:28,950 INFO: 127.0.0.1 - - [08/Mar/2026 20:27:28] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2026-03-08 20:28:00,048 INFO: USUÁRIO: admin | AÇÃO: Adição de Transação (data: 2026-03-08, valor: 300, tipo: Receita, descricao: Serviço de pintura) | IP: 127.0.0.1
+2026-03-08 20:28:00,049 INFO: 127.0.0.1 - - [08/Mar/2026 20:28:00] "[32mPOST /financas/transacao/add HTTP/1.1[0m" 302 -
+2026-03-08 20:28:00,072 INFO: 127.0.0.1 - - [08/Mar/2026 20:28:00] "GET /financas?mes=3&ano=2026 HTTP/1.1" 200 -
+2026-03-08 20:28:00,087 INFO: 127.0.0.1 - - [08/Mar/2026 20:28:00] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2026-03-08 20:28:09,767 INFO: 127.0.0.1 - - [08/Mar/2026 20:28:09] "GET /funcionarios HTTP/1.1" 200 -
+2026-03-08 20:28:09,786 INFO: 127.0.0.1 - - [08/Mar/2026 20:28:09] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2026-03-08 20:28:31,774 INFO: USUÁRIO: admin | AÇÃO: Cadastro de Funcionário (nome: leo, cpf: 024.603.654-03, salario_bruto: 3200) | IP: 127.0.0.1
+2026-03-08 20:28:31,775 INFO: 127.0.0.1 - - [08/Mar/2026 20:28:31] "[32mPOST /funcionarios/add HTTP/1.1[0m" 302 -
+2026-03-08 20:28:31,793 INFO: 127.0.0.1 - - [08/Mar/2026 20:28:31] "GET /funcionarios HTTP/1.1" 200 -
+2026-03-08 20:28:31,809 INFO: 127.0.0.1 - - [08/Mar/2026 20:28:31] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2026-03-08 20:28:42,597 INFO: 127.0.0.1 - - [08/Mar/2026 20:28:42] "GET /funcionarios/folha HTTP/1.1" 200 -
+2026-03-08 20:28:42,607 INFO: 127.0.0.1 - - [08/Mar/2026 20:28:42] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2026-03-08 20:28:49,540 INFO: USUÁRIO: admin | AÇÃO: Reabertura de Folha de Pagamento | IP: 127.0.0.1
+2026-03-08 20:28:49,541 INFO: 127.0.0.1 - - [08/Mar/2026 20:28:49] "[32mPOST /funcionarios/folha/reabrir HTTP/1.1[0m" 302 -
+2026-03-08 20:28:49,565 INFO: 127.0.0.1 - - [08/Mar/2026 20:28:49] "GET /funcionarios/folha?mes=3&ano=2026 HTTP/1.1" 200 -
+2026-03-08 20:28:49,591 INFO: 127.0.0.1 - - [08/Mar/2026 20:28:49] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2026-03-08 20:28:52,009 INFO: USUÁRIO: admin | AÇÃO: Reabertura de Folha de Pagamento | IP: 127.0.0.1
+2026-03-08 20:28:52,010 INFO: 127.0.0.1 - - [08/Mar/2026 20:28:52] "[32mPOST /funcionarios/folha/reabrir HTTP/1.1[0m" 302 -
+2026-03-08 20:28:52,033 INFO: 127.0.0.1 - - [08/Mar/2026 20:28:52] "GET /funcionarios/folha?mes=3&ano=2026 HTTP/1.1" 200 -
+2026-03-08 20:28:52,059 INFO: 127.0.0.1 - - [08/Mar/2026 20:28:52] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2026-03-08 20:28:59,608 INFO: USUÁRIO: admin | AÇÃO: Reabertura de Folha de Pagamento | IP: 127.0.0.1
+2026-03-08 20:28:59,609 INFO: 127.0.0.1 - - [08/Mar/2026 20:28:59] "[32mPOST /funcionarios/folha/reabrir HTTP/1.1[0m" 302 -
+2026-03-08 20:28:59,633 INFO: 127.0.0.1 - - [08/Mar/2026 20:28:59] "GET /funcionarios/folha?mes=3&ano=2026 HTTP/1.1" 200 -
+2026-03-08 20:28:59,682 INFO: 127.0.0.1 - - [08/Mar/2026 20:28:59] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2026-03-08 20:29:01,964 INFO: USUÁRIO: admin | AÇÃO: Reabertura de Folha de Pagamento | IP: 127.0.0.1
+2026-03-08 20:29:01,966 INFO: 127.0.0.1 - - [08/Mar/2026 20:29:01] "[32mPOST /funcionarios/folha/reabrir HTTP/1.1[0m" 302 -
+2026-03-08 20:29:01,989 INFO: 127.0.0.1 - - [08/Mar/2026 20:29:01] "GET /funcionarios/folha?mes=3&ano=2026 HTTP/1.1" 200 -
+2026-03-08 20:29:02,011 INFO: 127.0.0.1 - - [08/Mar/2026 20:29:02] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2026-03-08 20:29:03,665 INFO: USUÁRIO: admin | AÇÃO: Estorno de Pagamento de Salário | IP: 127.0.0.1
+2026-03-08 20:29:03,666 INFO: 127.0.0.1 - - [08/Mar/2026 20:29:03] "[32mPOST /funcionarios/folha/5/desfazer_pagamento HTTP/1.1[0m" 302 -
+2026-03-08 20:29:03,687 INFO: 127.0.0.1 - - [08/Mar/2026 20:29:03] "GET /funcionarios/folha?mes=03&ano=2026 HTTP/1.1" 200 -
+2026-03-08 20:29:03,708 INFO: 127.0.0.1 - - [08/Mar/2026 20:29:03] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2026-03-08 20:29:05,887 INFO: USUÁRIO: admin | AÇÃO: Estorno de Pagamento de Salário | IP: 127.0.0.1
+2026-03-08 20:29:05,889 INFO: 127.0.0.1 - - [08/Mar/2026 20:29:05] "[32mPOST /funcionarios/folha/6/desfazer_pagamento HTTP/1.1[0m" 302 -
+2026-03-08 20:29:05,911 INFO: 127.0.0.1 - - [08/Mar/2026 20:29:05] "GET /funcionarios/folha?mes=03&ano=2026 HTTP/1.1" 200 -
+2026-03-08 20:29:05,938 INFO: 127.0.0.1 - - [08/Mar/2026 20:29:05] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2026-03-08 20:29:11,650 INFO: USUÁRIO: admin | AÇÃO: Reabertura de Folha de Pagamento | IP: 127.0.0.1
+2026-03-08 20:29:11,651 INFO: 127.0.0.1 - - [08/Mar/2026 20:29:11] "[32mPOST /funcionarios/folha/reabrir HTTP/1.1[0m" 302 -
+2026-03-08 20:29:11,664 INFO: 127.0.0.1 - - [08/Mar/2026 20:29:11] "GET /funcionarios/folha?mes=3&ano=2026 HTTP/1.1" 200 -
+2026-03-08 20:29:11,688 INFO: 127.0.0.1 - - [08/Mar/2026 20:29:11] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2026-03-08 20:29:17,249 INFO: USUÁRIO: admin | AÇÃO: Fechamento de Folha de Pagamento | IP: 127.0.0.1
+2026-03-08 20:29:17,250 INFO: 127.0.0.1 - - [08/Mar/2026 20:29:17] "[32mPOST /funcionarios/folha/fechar HTTP/1.1[0m" 302 -
+2026-03-08 20:29:17,273 INFO: 127.0.0.1 - - [08/Mar/2026 20:29:17] "GET /funcionarios/folha?mes=3&ano=2026 HTTP/1.1" 200 -
+2026-03-08 20:29:17,297 INFO: 127.0.0.1 - - [08/Mar/2026 20:29:17] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2026-03-08 20:29:20,243 INFO: USUÁRIO: admin | AÇÃO: Pagamento de Salário (forma_pagamento: Chave Pix) | IP: 127.0.0.1
+2026-03-08 20:29:20,244 INFO: 127.0.0.1 - - [08/Mar/2026 20:29:20] "[32mPOST /funcionarios/folha/7/pagar HTTP/1.1[0m" 302 -
+2026-03-08 20:29:20,269 INFO: 127.0.0.1 - - [08/Mar/2026 20:29:20] "GET /funcionarios/folha?mes=03&ano=2026 HTTP/1.1" 200 -
+2026-03-08 20:29:20,294 INFO: 127.0.0.1 - - [08/Mar/2026 20:29:20] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2026-03-08 20:29:23,495 INFO: USUÁRIO: admin | AÇÃO: Pagamento de Salário (forma_pagamento: Transferência) | IP: 127.0.0.1
+2026-03-08 20:29:23,496 INFO: 127.0.0.1 - - [08/Mar/2026 20:29:23] "[32mPOST /funcionarios/folha/9/pagar HTTP/1.1[0m" 302 -
+2026-03-08 20:29:23,522 INFO: 127.0.0.1 - - [08/Mar/2026 20:29:23] "GET /funcionarios/folha?mes=03&ano=2026 HTTP/1.1" 200 -
+2026-03-08 20:29:23,546 INFO: 127.0.0.1 - - [08/Mar/2026 20:29:23] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2026-03-08 20:29:26,781 INFO: USUÁRIO: admin | AÇÃO: Pagamento de Salário (forma_pagamento: Espécie) | IP: 127.0.0.1
+2026-03-08 20:29:26,782 INFO: 127.0.0.1 - - [08/Mar/2026 20:29:26] "[32mPOST /funcionarios/folha/8/pagar HTTP/1.1[0m" 302 -
+2026-03-08 20:29:26,802 INFO: 127.0.0.1 - - [08/Mar/2026 20:29:26] "GET /funcionarios/folha?mes=03&ano=2026 HTTP/1.1" 200 -
+2026-03-08 20:29:26,825 INFO: 127.0.0.1 - - [08/Mar/2026 20:29:26] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2026-03-08 20:29:37,766 INFO: 127.0.0.1 - - [08/Mar/2026 20:29:37] "GET /funcionarios/folha/relatorio?mes=3&ano=2026 HTTP/1.1" 200 -
