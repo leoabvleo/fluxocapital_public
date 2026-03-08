@@ -1,3 +1,4 @@
+/*M!999999\- enable the sandbox mode */ 
 -- MariaDB dump 10.19-12.2.2-MariaDB, for osx10.21 (arm64)
 --
 -- Host: localhost    Database: db_fluxocapital
@@ -39,8 +40,8 @@ CREATE TABLE `ativos` (
   PRIMARY KEY (`id`),
   KEY `fk_ativo_categoria_ativo` (`categoria_id`),
   KEY `fk_ativos_carteira` (`carteira_id`),
-  FOREIGN KEY (`categoria_id`) REFERENCES `categoria_ativos` (`id`),
-  FOREIGN KEY (`carteira_id`) REFERENCES `carteiras` (`id`)
+  CONSTRAINT `1` FOREIGN KEY (`categoria_id`) REFERENCES `categoria_ativos` (`id`),
+  CONSTRAINT `2` FOREIGN KEY (`carteira_id`) REFERENCES `carteiras` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -109,7 +110,7 @@ CREATE TABLE `categoria_ativos` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `nome` (`nome`),
   KEY `fk_categoria_ativos_carteira` (`carteira_id`),
-  FOREIGN KEY (`carteira_id`) REFERENCES `carteiras` (`id`) ON DELETE CASCADE
+  CONSTRAINT `1` FOREIGN KEY (`carteira_id`) REFERENCES `carteiras` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -148,7 +149,7 @@ CREATE TABLE `categoria_proventos` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `nome` (`nome`),
   KEY `fk_categoria_proventos_carteira` (`carteira_id`),
-  FOREIGN KEY (`carteira_id`) REFERENCES `carteiras` (`id`) ON DELETE CASCADE
+  CONSTRAINT `1` FOREIGN KEY (`carteira_id`) REFERENCES `carteiras` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -189,7 +190,7 @@ CREATE TABLE `categorias` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `nome` (`nome`),
   KEY `fk_categorias_carteira` (`carteira_id`),
-  FOREIGN KEY (`carteira_id`) REFERENCES `carteiras` (`id`) ON DELETE CASCADE
+  CONSTRAINT `1` FOREIGN KEY (`carteira_id`) REFERENCES `carteiras` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=22 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -248,8 +249,8 @@ CREATE TABLE `config_financeiras_fixas` (
   PRIMARY KEY (`id`),
   KEY `categoria_id` (`categoria_id`),
   KEY `fk_config_financeiras_fixas_carteira` (`carteira_id`),
-  FOREIGN KEY (`categoria_id`) REFERENCES `categorias` (`id`),
-  FOREIGN KEY (`carteira_id`) REFERENCES `carteiras` (`id`)
+  CONSTRAINT `1` FOREIGN KEY (`categoria_id`) REFERENCES `categorias` (`id`),
+  CONSTRAINT `2` FOREIGN KEY (`carteira_id`) REFERENCES `carteiras` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -288,9 +289,9 @@ CREATE TABLE `dividendos` (
   KEY `fk_categoria_provento` (`categoria_provento_id`),
   KEY `fk_dividendos_carteira` (`carteira_id`),
   KEY `fk_div_categoria_ativo` (`categoria_id`),
-  FOREIGN KEY (`categoria_provento_id`) REFERENCES `categoria_proventos` (`id`),
-  FOREIGN KEY (`categoria_id`) REFERENCES `categoria_ativos` (`id`),
-  FOREIGN KEY (`carteira_id`) REFERENCES `carteiras` (`id`)
+  CONSTRAINT `1` FOREIGN KEY (`categoria_provento_id`) REFERENCES `categoria_proventos` (`id`),
+  CONSTRAINT `2` FOREIGN KEY (`categoria_id`) REFERENCES `categoria_ativos` (`id`),
+  CONSTRAINT `3` FOREIGN KEY (`carteira_id`) REFERENCES `carteiras` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -335,8 +336,8 @@ CREATE TABLE `folha_pagamentos` (
   PRIMARY KEY (`id`),
   KEY `funcionario_id` (`funcionario_id`),
   KEY `transacao_id` (`transacao_id`),
-  FOREIGN KEY (`funcionario_id`) REFERENCES `funcionarios` (`id`),
-  FOREIGN KEY (`transacao_id`) REFERENCES `transacoes` (`id`)
+  CONSTRAINT `1` FOREIGN KEY (`funcionario_id`) REFERENCES `funcionarios` (`id`),
+  CONSTRAINT `2` FOREIGN KEY (`transacao_id`) REFERENCES `transacoes` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -373,8 +374,8 @@ CREATE TABLE `funcionario_lancamentos` (
   PRIMARY KEY (`id`),
   KEY `funcionario_id` (`funcionario_id`),
   KEY `fk_folha_id` (`folha_id`),
-  FOREIGN KEY (`funcionario_id`) REFERENCES `funcionarios` (`id`),
-  FOREIGN KEY (`folha_id`) REFERENCES `folha_pagamentos` (`id`)
+  CONSTRAINT `1` FOREIGN KEY (`funcionario_id`) REFERENCES `funcionarios` (`id`),
+  CONSTRAINT `2` FOREIGN KEY (`folha_id`) REFERENCES `folha_pagamentos` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -411,7 +412,7 @@ CREATE TABLE `funcionarios` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `cpf` (`cpf`),
   KEY `carteira_id` (`carteira_id`),
-  FOREIGN KEY (`carteira_id`) REFERENCES `carteiras` (`id`)
+  CONSTRAINT `1` FOREIGN KEY (`carteira_id`) REFERENCES `carteiras` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -423,8 +424,8 @@ SET @OLD_AUTOCOMMIT=@@AUTOCOMMIT, @@AUTOCOMMIT=0;
 LOCK TABLES `funcionarios` WRITE;
 /*!40000 ALTER TABLE `funcionarios` DISABLE KEYS */;
 INSERT INTO `funcionarios` VALUES
-(1,'JOÃO DA SILVA','1313213132132',1800.00,'2025-01-01',1,10,7.50),
-(2,'MARIA JOSÉ','6546546546',1900.00,'2025-01-01',1,10,10.00);
+(1,'JOÃO DA SILVA','168.995.350-09',1800.00,'2025-01-01',1,10,7.50),
+(2,'MARIA JOSÉ','529.982.247-25',1900.00,'2025-01-01',1,10,10.00);
 /*!40000 ALTER TABLE `funcionarios` ENABLE KEYS */;
 UNLOCK TABLES;
 COMMIT;
@@ -448,8 +449,8 @@ CREATE TABLE `gastos_cartao` (
   PRIMARY KEY (`id`),
   KEY `transacao_id` (`transacao_id`),
   KEY `fk_gasto_categoria` (`categoria_id`),
-  FOREIGN KEY (`transacao_id`) REFERENCES `transacoes` (`id`),
-  FOREIGN KEY (`categoria_id`) REFERENCES `categorias` (`id`)
+  CONSTRAINT `1` FOREIGN KEY (`transacao_id`) REFERENCES `transacoes` (`id`),
+  CONSTRAINT `2` FOREIGN KEY (`categoria_id`) REFERENCES `categorias` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -522,8 +523,8 @@ CREATE TABLE `transacoes` (
   PRIMARY KEY (`id`),
   KEY `categoria_id` (`categoria_id`),
   KEY `fk_transacoes_carteira` (`carteira_id`),
-  FOREIGN KEY (`carteira_id`) REFERENCES `carteiras` (`id`),
-  FOREIGN KEY (`categoria_id`) REFERENCES `categorias` (`id`)
+  CONSTRAINT `1` FOREIGN KEY (`carteira_id`) REFERENCES `carteiras` (`id`),
+  CONSTRAINT `2` FOREIGN KEY (`categoria_id`) REFERENCES `categorias` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -563,8 +564,8 @@ CREATE TABLE `usuario_carteira` (
   `carteira_id` int(11) NOT NULL,
   PRIMARY KEY (`usuario_id`,`carteira_id`),
   KEY `carteira_id` (`carteira_id`),
-  FOREIGN KEY (`usuario_id`) REFERENCES `usuarios` (`id`) ON DELETE CASCADE,
-  FOREIGN KEY (`carteira_id`) REFERENCES `carteiras` (`id`) ON DELETE CASCADE
+  CONSTRAINT `1` FOREIGN KEY (`usuario_id`) REFERENCES `usuarios` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `2` FOREIGN KEY (`carteira_id`) REFERENCES `carteiras` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -604,8 +605,8 @@ CREATE TABLE `usuarios` (
   UNIQUE KEY `username` (`username`),
   KEY `fk_criado_por` (`criado_por_id`),
   KEY `fk_usuario_perfil` (`perfil_id`),
-  FOREIGN KEY (`criado_por_id`) REFERENCES `usuarios` (`id`),
-  FOREIGN KEY (`perfil_id`) REFERENCES `perfil_usuario` (`id`)
+  CONSTRAINT `1` FOREIGN KEY (`criado_por_id`) REFERENCES `usuarios` (`id`),
+  CONSTRAINT `2` FOREIGN KEY (`perfil_id`) REFERENCES `perfil_usuario` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -648,8 +649,8 @@ CREATE TABLE `vendas` (
   PRIMARY KEY (`id`),
   KEY `fk_vendas_carteira` (`carteira_id`),
   KEY `fk_vendas_categoria_ativo` (`categoria_id`),
-  FOREIGN KEY (`carteira_id`) REFERENCES `carteiras` (`id`),
-  FOREIGN KEY (`categoria_id`) REFERENCES `categoria_ativos` (`id`)
+  CONSTRAINT `1` FOREIGN KEY (`carteira_id`) REFERENCES `carteiras` (`id`),
+  CONSTRAINT `2` FOREIGN KEY (`categoria_id`) REFERENCES `categoria_ativos` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -679,4 +680,4 @@ SET AUTOCOMMIT=@OLD_AUTOCOMMIT;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*M!100616 SET NOTE_VERBOSITY=@OLD_NOTE_VERBOSITY */;
 
--- Dump completed on 2026-03-07 13:14:18
+-- Dump completed on 2026-03-08 14:03:52
