@@ -13,7 +13,7 @@ __pycache__/
 
 # Arquivos de banco de dados e planilhas sensíveis
 *.sql
-!db_fluxocapital_sync.sql
+!db_fluxocapital.sql
 *.xlsx
 *.sqlite
 *.sqlite3
@@ -25,23 +25,7 @@ index.php
 
 # Scripts Shell de infra/manutenção locais
 *db*.sh
-monitorar_*.sh
-gerar-painel-bloqueios.sh
-git_sync.sh
-
-# Scripts temporários de correção de banco/migração
-add_perfil_column.py
-alter_table.py
-create_carteira_table.py
-create_categoria_ativos.py
-create_usuario_carteira*.py
-migrate_*.py
-migration_*.py
-update_div_categories_manual.py
-update_knip_div.py
-verify_proventos.py
-query_db.py
-reset_password.py
+!iniciar_banco.sh
 
 #outros arquivos
 .DS_Store
