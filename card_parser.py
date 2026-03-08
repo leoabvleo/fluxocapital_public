@@ -255,14 +255,16 @@ def import_card_invoice(pdf_path, carteira='Consolidada'):
 if __name__ == "__main__":
     # Test import
     import sys
+    import os
     from app import app
     with app.app_context():
-        success, msg = import_card_invoice("/private/var/www/fluxocapital/templates/cartao-XP.pdf")
+        success, msg = import_card_invoice(os.path.join(os.path.dirname(__file__), "templates", "cartao-XP.pdf"))
         print(msg)
 
 def update_map_categoria(categoria_nome, descricao):
     import re
-    filepath = '/private/var/www/fluxocapital/card_parser.py'
+    import os
+    filepath = os.path.join(os.path.dirname(__file__), 'card_parser.py')
     try:
         with open(filepath, 'r', encoding='utf-8') as f:
             content = f.read()

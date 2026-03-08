@@ -241,3 +241,8 @@
 2026-03-07 15:54:53,602 INFO: USUÁRIO: leonardo | AÇÃO: Logout de usuário | IP: 127.0.0.1
 2026-03-07 15:54:53,604 INFO: 127.0.0.1 - - [07/Mar/2026 15:54:53] "[32mGET /logout HTTP/1.1[0m" 302 -
 2026-03-07 15:54:53,611 INFO: 127.0.0.1 - - [07/Mar/2026 15:54:53] "GET /login HTTP/1.1" 200 -
+2026-03-08 20:19:45,751 WARNING:  * Debugger is active!
+2026-03-08 20:19:45,756 INFO:  * Debugger PIN: 866-719-685
+2026-03-08 20:21:33,884 INFO:  * Detected change in '/private/var/www/fluxocapital_public/card_parser.py', reloading
+2026-03-08 20:21:34,603 WARNING:  * Debugger is active!
+2026-03-08 20:21:34,607 INFO:  * Debugger PIN: 866-719-685

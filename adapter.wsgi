@@ -14,7 +14,7 @@ os.environ['DB_NAME'] = 'db_fluxocapital'
 logging.basicConfig(stream=sys.stderr)
 
 # Caminho do projeto
-sys.path.insert(0, "/var/www/fluxocapital")
+sys.path.insert(0, "/var/www/fluxocapital_public")
 
 # Importa o app do arquivo app.py
 from app import app as application

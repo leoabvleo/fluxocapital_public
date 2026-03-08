@@ -34,13 +34,9 @@ app.config['SQLALCHEMY_DATABASE_URI'] = f'mysql+mysqlconnector://{db_user}:{db_p
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 # --- CONFIGURAÇÃO DE LOG ---
-# Usa caminho local se não estiver no servidor
-if os.path.exists('/var/www/fluxocapital/'):
-    log_file = '/var/www/fluxocapital/login_errors.log'
-    actions_log_file = '/var/www/fluxocapital/user_actions.log'
-else:
-    log_file = os.path.join(os.path.abspath(os.path.dirname(__file__)), 'login_errors.log')
-    actions_log_file = os.path.join(os.path.abspath(os.path.dirname(__file__)), 'user_actions.log')
+base_dir = os.path.abspath(os.path.dirname(__file__))
+log_file = os.path.join(base_dir, 'login_errors.log')
+actions_log_file = os.path.join(base_dir, 'user_actions.log')
 
 # Logger para erros e avisos do sistema/login
 logging.basicConfig(
