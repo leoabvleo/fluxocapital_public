@@ -104,8 +104,14 @@ pip install -r requirements.txt
 python3 app.py
 ```
 
-### Credenciais de Teste:
+### Credenciais de Teste locais:
 URL: http://localhost:5001/
+
+Usuário: admin<br>
+Senha: 8mH29DAC
+
+### Credenciais de Teste Remotas:
+URL: https://fluxocapital.duckdns.org/
 
 Usuário: admin<br>
 Senha: 8mH29DAC
