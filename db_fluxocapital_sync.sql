@@ -1,9 +1,4 @@
 /*M!999999\- enable the sandbox mode */ 
--- MariaDB dump 10.19-12.2.2-MariaDB, for osx10.21 (arm64)
---
--- Host: localhost    Database: db_fluxocapital
--- ------------------------------------------------------
--- Server version	12.2.2-MariaDB
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -15,11 +10,6 @@
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 /*M!100616 SET @OLD_NOTE_VERBOSITY=@@NOTE_VERBOSITY, NOTE_VERBOSITY=0 */;
-
---
--- Table structure for table `ativos`
---
-
 DROP TABLE IF EXISTS `ativos`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8mb4 */;
@@ -45,10 +35,6 @@ CREATE TABLE `ativos` (
 ) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
---
--- Dumping data for table `ativos`
---
-
 SET @OLD_AUTOCOMMIT=@@AUTOCOMMIT, @@AUTOCOMMIT=0;
 LOCK TABLES `ativos` WRITE;
 /*!40000 ALTER TABLE `ativos` DISABLE KEYS */;
@@ -64,11 +50,6 @@ INSERT INTO `ativos` VALUES
 UNLOCK TABLES;
 COMMIT;
 SET AUTOCOMMIT=@OLD_AUTOCOMMIT;
-
---
--- Table structure for table `carteiras`
---
-
 DROP TABLE IF EXISTS `carteiras`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8mb4 */;
@@ -79,10 +60,6 @@ CREATE TABLE `carteiras` (
   UNIQUE KEY `nome` (`nome`)
 ) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `carteiras`
---
 
 SET @OLD_AUTOCOMMIT=@@AUTOCOMMIT, @@AUTOCOMMIT=0;
 LOCK TABLES `carteiras` WRITE;
@@ -95,11 +72,6 @@ INSERT INTO `carteiras` VALUES
 UNLOCK TABLES;
 COMMIT;
 SET AUTOCOMMIT=@OLD_AUTOCOMMIT;
-
---
--- Table structure for table `categoria_ativos`
---
-
 DROP TABLE IF EXISTS `categoria_ativos`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8mb4 */;
@@ -113,10 +85,6 @@ CREATE TABLE `categoria_ativos` (
   CONSTRAINT `1` FOREIGN KEY (`carteira_id`) REFERENCES `carteiras` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `categoria_ativos`
---
 
 SET @OLD_AUTOCOMMIT=@@AUTOCOMMIT, @@AUTOCOMMIT=0;
 LOCK TABLES `categoria_ativos` WRITE;
@@ -134,11 +102,6 @@ INSERT INTO `categoria_ativos` VALUES
 UNLOCK TABLES;
 COMMIT;
 SET AUTOCOMMIT=@OLD_AUTOCOMMIT;
-
---
--- Table structure for table `categoria_proventos`
---
-
 DROP TABLE IF EXISTS `categoria_proventos`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8mb4 */;
@@ -152,10 +115,6 @@ CREATE TABLE `categoria_proventos` (
   CONSTRAINT `1` FOREIGN KEY (`carteira_id`) REFERENCES `carteiras` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `categoria_proventos`
---
 
 SET @OLD_AUTOCOMMIT=@@AUTOCOMMIT, @@AUTOCOMMIT=0;
 LOCK TABLES `categoria_proventos` WRITE;
@@ -173,11 +132,6 @@ INSERT INTO `categoria_proventos` VALUES
 UNLOCK TABLES;
 COMMIT;
 SET AUTOCOMMIT=@OLD_AUTOCOMMIT;
-
---
--- Table structure for table `categorias`
---
-
 DROP TABLE IF EXISTS `categorias`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8mb4 */;
@@ -193,10 +147,6 @@ CREATE TABLE `categorias` (
   CONSTRAINT `1` FOREIGN KEY (`carteira_id`) REFERENCES `carteiras` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=22 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `categorias`
---
 
 SET @OLD_AUTOCOMMIT=@@AUTOCOMMIT, @@AUTOCOMMIT=0;
 LOCK TABLES `categorias` WRITE;
@@ -227,11 +177,6 @@ INSERT INTO `categorias` VALUES
 UNLOCK TABLES;
 COMMIT;
 SET AUTOCOMMIT=@OLD_AUTOCOMMIT;
-
---
--- Table structure for table `config_financeiras_fixas`
---
-
 DROP TABLE IF EXISTS `config_financeiras_fixas`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8mb4 */;
@@ -254,10 +199,6 @@ CREATE TABLE `config_financeiras_fixas` (
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
---
--- Dumping data for table `config_financeiras_fixas`
---
-
 SET @OLD_AUTOCOMMIT=@@AUTOCOMMIT, @@AUTOCOMMIT=0;
 LOCK TABLES `config_financeiras_fixas` WRITE;
 /*!40000 ALTER TABLE `config_financeiras_fixas` DISABLE KEYS */;
@@ -267,11 +208,6 @@ INSERT INTO `config_financeiras_fixas` VALUES
 UNLOCK TABLES;
 COMMIT;
 SET AUTOCOMMIT=@OLD_AUTOCOMMIT;
-
---
--- Table structure for table `dividendos`
---
-
 DROP TABLE IF EXISTS `dividendos`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8mb4 */;
@@ -295,10 +231,6 @@ CREATE TABLE `dividendos` (
 ) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
---
--- Dumping data for table `dividendos`
---
-
 SET @OLD_AUTOCOMMIT=@@AUTOCOMMIT, @@AUTOCOMMIT=0;
 LOCK TABLES `dividendos` WRITE;
 /*!40000 ALTER TABLE `dividendos` DISABLE KEYS */;
@@ -313,11 +245,6 @@ INSERT INTO `dividendos` VALUES
 UNLOCK TABLES;
 COMMIT;
 SET AUTOCOMMIT=@OLD_AUTOCOMMIT;
-
---
--- Table structure for table `folha_pagamentos`
---
-
 DROP TABLE IF EXISTS `folha_pagamentos`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8mb4 */;
@@ -341,10 +268,6 @@ CREATE TABLE `folha_pagamentos` (
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
---
--- Dumping data for table `folha_pagamentos`
---
-
 SET @OLD_AUTOCOMMIT=@@AUTOCOMMIT, @@AUTOCOMMIT=0;
 LOCK TABLES `folha_pagamentos` WRITE;
 /*!40000 ALTER TABLE `folha_pagamentos` DISABLE KEYS */;
@@ -355,11 +278,6 @@ INSERT INTO `folha_pagamentos` VALUES
 UNLOCK TABLES;
 COMMIT;
 SET AUTOCOMMIT=@OLD_AUTOCOMMIT;
-
---
--- Table structure for table `funcionario_lancamentos`
---
-
 DROP TABLE IF EXISTS `funcionario_lancamentos`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8mb4 */;
@@ -379,10 +297,6 @@ CREATE TABLE `funcionario_lancamentos` (
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
---
--- Dumping data for table `funcionario_lancamentos`
---
-
 SET @OLD_AUTOCOMMIT=@@AUTOCOMMIT, @@AUTOCOMMIT=0;
 LOCK TABLES `funcionario_lancamentos` WRITE;
 /*!40000 ALTER TABLE `funcionario_lancamentos` DISABLE KEYS */;
@@ -392,11 +306,6 @@ INSERT INTO `funcionario_lancamentos` VALUES
 UNLOCK TABLES;
 COMMIT;
 SET AUTOCOMMIT=@OLD_AUTOCOMMIT;
-
---
--- Table structure for table `funcionarios`
---
-
 DROP TABLE IF EXISTS `funcionarios`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8mb4 */;
@@ -416,10 +325,6 @@ CREATE TABLE `funcionarios` (
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
---
--- Dumping data for table `funcionarios`
---
-
 SET @OLD_AUTOCOMMIT=@@AUTOCOMMIT, @@AUTOCOMMIT=0;
 LOCK TABLES `funcionarios` WRITE;
 /*!40000 ALTER TABLE `funcionarios` DISABLE KEYS */;
@@ -430,11 +335,6 @@ INSERT INTO `funcionarios` VALUES
 UNLOCK TABLES;
 COMMIT;
 SET AUTOCOMMIT=@OLD_AUTOCOMMIT;
-
---
--- Table structure for table `gastos_cartao`
---
-
 DROP TABLE IF EXISTS `gastos_cartao`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8mb4 */;
@@ -454,10 +354,6 @@ CREATE TABLE `gastos_cartao` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
---
--- Dumping data for table `gastos_cartao`
---
-
 SET @OLD_AUTOCOMMIT=@@AUTOCOMMIT, @@AUTOCOMMIT=0;
 LOCK TABLES `gastos_cartao` WRITE;
 /*!40000 ALTER TABLE `gastos_cartao` DISABLE KEYS */;
@@ -465,11 +361,6 @@ LOCK TABLES `gastos_cartao` WRITE;
 UNLOCK TABLES;
 COMMIT;
 SET AUTOCOMMIT=@OLD_AUTOCOMMIT;
-
---
--- Table structure for table `perfil_usuario`
---
-
 DROP TABLE IF EXISTS `perfil_usuario`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8mb4 */;
@@ -480,10 +371,6 @@ CREATE TABLE `perfil_usuario` (
   UNIQUE KEY `nome` (`nome`)
 ) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `perfil_usuario`
---
 
 SET @OLD_AUTOCOMMIT=@@AUTOCOMMIT, @@AUTOCOMMIT=0;
 LOCK TABLES `perfil_usuario` WRITE;
@@ -496,11 +383,6 @@ INSERT INTO `perfil_usuario` VALUES
 UNLOCK TABLES;
 COMMIT;
 SET AUTOCOMMIT=@OLD_AUTOCOMMIT;
-
---
--- Table structure for table `transacoes`
---
-
 DROP TABLE IF EXISTS `transacoes`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8mb4 */;
@@ -528,10 +410,6 @@ CREATE TABLE `transacoes` (
 ) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
---
--- Dumping data for table `transacoes`
---
-
 SET @OLD_AUTOCOMMIT=@@AUTOCOMMIT, @@AUTOCOMMIT=0;
 LOCK TABLES `transacoes` WRITE;
 /*!40000 ALTER TABLE `transacoes` DISABLE KEYS */;
@@ -551,11 +429,6 @@ INSERT INTO `transacoes` VALUES
 UNLOCK TABLES;
 COMMIT;
 SET AUTOCOMMIT=@OLD_AUTOCOMMIT;
-
---
--- Table structure for table `usuario_carteira`
---
-
 DROP TABLE IF EXISTS `usuario_carteira`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8mb4 */;
@@ -569,10 +442,6 @@ CREATE TABLE `usuario_carteira` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
---
--- Dumping data for table `usuario_carteira`
---
-
 SET @OLD_AUTOCOMMIT=@@AUTOCOMMIT, @@AUTOCOMMIT=0;
 LOCK TABLES `usuario_carteira` WRITE;
 /*!40000 ALTER TABLE `usuario_carteira` DISABLE KEYS */;
@@ -585,11 +454,6 @@ INSERT INTO `usuario_carteira` VALUES
 UNLOCK TABLES;
 COMMIT;
 SET AUTOCOMMIT=@OLD_AUTOCOMMIT;
-
---
--- Table structure for table `usuarios`
---
-
 DROP TABLE IF EXISTS `usuarios`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8mb4 */;
@@ -610,10 +474,6 @@ CREATE TABLE `usuarios` (
 ) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
---
--- Dumping data for table `usuarios`
---
-
 SET @OLD_AUTOCOMMIT=@@AUTOCOMMIT, @@AUTOCOMMIT=0;
 LOCK TABLES `usuarios` WRITE;
 /*!40000 ALTER TABLE `usuarios` DISABLE KEYS */;
@@ -627,11 +487,6 @@ INSERT INTO `usuarios` VALUES
 UNLOCK TABLES;
 COMMIT;
 SET AUTOCOMMIT=@OLD_AUTOCOMMIT;
-
---
--- Table structure for table `vendas`
---
-
 DROP TABLE IF EXISTS `vendas`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8mb4 */;
@@ -653,10 +508,6 @@ CREATE TABLE `vendas` (
   CONSTRAINT `2` FOREIGN KEY (`categoria_id`) REFERENCES `categoria_ativos` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `vendas`
---
 
 SET @OLD_AUTOCOMMIT=@@AUTOCOMMIT, @@AUTOCOMMIT=0;
 LOCK TABLES `vendas` WRITE;
@@ -680,4 +531,3 @@ SET AUTOCOMMIT=@OLD_AUTOCOMMIT;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*M!100616 SET NOTE_VERBOSITY=@OLD_NOTE_VERBOSITY */;
 
--- Dump completed on 2026-03-08 14:12:04
