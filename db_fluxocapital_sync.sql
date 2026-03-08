@@ -36,7 +36,6 @@ CREATE TABLE `ativos` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 SET @OLD_AUTOCOMMIT=@@AUTOCOMMIT, @@AUTOCOMMIT=0;
-LOCK TABLES `ativos` WRITE;
 /*!40000 ALTER TABLE `ativos` DISABLE KEYS */;
 INSERT INTO `ativos` VALUES
 (1,'VALE3',NULL,'2026-01-01',5.000000,72.00,78.86,1.88,NULL,'Ações','Carteira 1',1,10),
@@ -47,7 +46,6 @@ INSERT INTO `ativos` VALUES
 (6,'PETR4',NULL,'2026-03-06',10.000000,40.25,42.11,NULL,NULL,'Ações','Carteira 2',1,11),
 (7,'TESOURO SELIC',NULL,'2026-03-07',1.000000,5000.00,5100.00,NULL,NULL,'Ações','Carteira 1',6,10);
 /*!40000 ALTER TABLE `ativos` ENABLE KEYS */;
-UNLOCK TABLES;
 COMMIT;
 SET AUTOCOMMIT=@OLD_AUTOCOMMIT;
 DROP TABLE IF EXISTS `carteiras`;
@@ -62,14 +60,12 @@ CREATE TABLE `carteiras` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 SET @OLD_AUTOCOMMIT=@@AUTOCOMMIT, @@AUTOCOMMIT=0;
-LOCK TABLES `carteiras` WRITE;
 /*!40000 ALTER TABLE `carteiras` DISABLE KEYS */;
 INSERT INTO `carteiras` VALUES
 (10,'Carteira 1'),
 (11,'Carteira 2'),
 (1,'Consolidada');
 /*!40000 ALTER TABLE `carteiras` ENABLE KEYS */;
-UNLOCK TABLES;
 COMMIT;
 SET AUTOCOMMIT=@OLD_AUTOCOMMIT;
 DROP TABLE IF EXISTS `categoria_ativos`;
@@ -87,7 +83,6 @@ CREATE TABLE `categoria_ativos` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 SET @OLD_AUTOCOMMIT=@@AUTOCOMMIT, @@AUTOCOMMIT=0;
-LOCK TABLES `categoria_ativos` WRITE;
 /*!40000 ALTER TABLE `categoria_ativos` DISABLE KEYS */;
 INSERT INTO `categoria_ativos` VALUES
 (1,'Ações',NULL),
@@ -99,7 +94,6 @@ INSERT INTO `categoria_ativos` VALUES
 (7,'Previdência',NULL),
 (8,'Cripto',NULL);
 /*!40000 ALTER TABLE `categoria_ativos` ENABLE KEYS */;
-UNLOCK TABLES;
 COMMIT;
 SET AUTOCOMMIT=@OLD_AUTOCOMMIT;
 DROP TABLE IF EXISTS `categoria_proventos`;
@@ -117,7 +111,6 @@ CREATE TABLE `categoria_proventos` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 SET @OLD_AUTOCOMMIT=@@AUTOCOMMIT, @@AUTOCOMMIT=0;
-LOCK TABLES `categoria_proventos` WRITE;
 /*!40000 ALTER TABLE `categoria_proventos` DISABLE KEYS */;
 INSERT INTO `categoria_proventos` VALUES
 (1,'Dividendos',NULL),
@@ -129,7 +122,6 @@ INSERT INTO `categoria_proventos` VALUES
 (8,'Rendimentos BTC',NULL),
 (12,'Frações de Ações',NULL);
 /*!40000 ALTER TABLE `categoria_proventos` ENABLE KEYS */;
-UNLOCK TABLES;
 COMMIT;
 SET AUTOCOMMIT=@OLD_AUTOCOMMIT;
 DROP TABLE IF EXISTS `categorias`;
@@ -149,7 +141,6 @@ CREATE TABLE `categorias` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 SET @OLD_AUTOCOMMIT=@@AUTOCOMMIT, @@AUTOCOMMIT=0;
-LOCK TABLES `categorias` WRITE;
 /*!40000 ALTER TABLE `categorias` DISABLE KEYS */;
 INSERT INTO `categorias` VALUES
 (1,'Salário','Receita','bi-cash-stack',NULL),
@@ -174,7 +165,6 @@ INSERT INTO `categorias` VALUES
 (20,'Beleza/Higiene','Despesa','bi-tag',NULL),
 (21,'Funcionário','Despesa','bi-tag',NULL);
 /*!40000 ALTER TABLE `categorias` ENABLE KEYS */;
-UNLOCK TABLES;
 COMMIT;
 SET AUTOCOMMIT=@OLD_AUTOCOMMIT;
 DROP TABLE IF EXISTS `config_financeiras_fixas`;
@@ -200,12 +190,10 @@ CREATE TABLE `config_financeiras_fixas` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 SET @OLD_AUTOCOMMIT=@@AUTOCOMMIT, @@AUTOCOMMIT=0;
-LOCK TABLES `config_financeiras_fixas` WRITE;
 /*!40000 ALTER TABLE `config_financeiras_fixas` DISABLE KEYS */;
 INSERT INTO `config_financeiras_fixas` VALUES
 (1,'Diarista',1000.00,1,21,'Consolidada',1,'Despesa',1,0);
 /*!40000 ALTER TABLE `config_financeiras_fixas` ENABLE KEYS */;
-UNLOCK TABLES;
 COMMIT;
 SET AUTOCOMMIT=@OLD_AUTOCOMMIT;
 DROP TABLE IF EXISTS `dividendos`;
@@ -232,7 +220,6 @@ CREATE TABLE `dividendos` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 SET @OLD_AUTOCOMMIT=@@AUTOCOMMIT, @@AUTOCOMMIT=0;
-LOCK TABLES `dividendos` WRITE;
 /*!40000 ALTER TABLE `dividendos` DISABLE KEYS */;
 INSERT INTO `dividendos` VALUES
 (1,'VALE3',25.00,'2026-03-06','Dividendos','Carteira 1',1,10,1),
@@ -242,7 +229,6 @@ INSERT INTO `dividendos` VALUES
 (5,'PETR4',7.50,'2026-01-06','Dividendos','Carteira 2',1,11,1),
 (6,'PETR4',9.00,'2025-12-15','Dividendos','Carteira 2',1,11,1);
 /*!40000 ALTER TABLE `dividendos` ENABLE KEYS */;
-UNLOCK TABLES;
 COMMIT;
 SET AUTOCOMMIT=@OLD_AUTOCOMMIT;
 DROP TABLE IF EXISTS `folha_pagamentos`;
@@ -269,13 +255,11 @@ CREATE TABLE `folha_pagamentos` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 SET @OLD_AUTOCOMMIT=@@AUTOCOMMIT, @@AUTOCOMMIT=0;
-LOCK TABLES `folha_pagamentos` WRITE;
 /*!40000 ALTER TABLE `folha_pagamentos` DISABLE KEYS */;
 INSERT INTO `folha_pagamentos` VALUES
 (1,1,'2026-03',1800.00,135.00,100.00,0.00,1565.00,'2026-03-06',1,1),
 (2,2,'2026-03',1900.00,190.00,0.00,0.00,1710.00,NULL,0,NULL);
 /*!40000 ALTER TABLE `folha_pagamentos` ENABLE KEYS */;
-UNLOCK TABLES;
 COMMIT;
 SET AUTOCOMMIT=@OLD_AUTOCOMMIT;
 DROP TABLE IF EXISTS `funcionario_lancamentos`;
@@ -298,12 +282,10 @@ CREATE TABLE `funcionario_lancamentos` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 SET @OLD_AUTOCOMMIT=@@AUTOCOMMIT, @@AUTOCOMMIT=0;
-LOCK TABLES `funcionario_lancamentos` WRITE;
 /*!40000 ALTER TABLE `funcionario_lancamentos` DISABLE KEYS */;
 INSERT INTO `funcionario_lancamentos` VALUES
 (1,1,'Adiantamento',100.00,'2026-03-06','Vale de adiantamento',1);
 /*!40000 ALTER TABLE `funcionario_lancamentos` ENABLE KEYS */;
-UNLOCK TABLES;
 COMMIT;
 SET AUTOCOMMIT=@OLD_AUTOCOMMIT;
 DROP TABLE IF EXISTS `funcionarios`;
@@ -326,13 +308,11 @@ CREATE TABLE `funcionarios` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 SET @OLD_AUTOCOMMIT=@@AUTOCOMMIT, @@AUTOCOMMIT=0;
-LOCK TABLES `funcionarios` WRITE;
 /*!40000 ALTER TABLE `funcionarios` DISABLE KEYS */;
 INSERT INTO `funcionarios` VALUES
 (1,'JOÃO DA SILVA','168.995.350-09',1800.00,'2025-01-01',1,10,7.50),
 (2,'MARIA JOSÉ','529.982.247-25',1900.00,'2025-01-01',1,10,10.00);
 /*!40000 ALTER TABLE `funcionarios` ENABLE KEYS */;
-UNLOCK TABLES;
 COMMIT;
 SET AUTOCOMMIT=@OLD_AUTOCOMMIT;
 DROP TABLE IF EXISTS `gastos_cartao`;
@@ -355,10 +335,8 @@ CREATE TABLE `gastos_cartao` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 SET @OLD_AUTOCOMMIT=@@AUTOCOMMIT, @@AUTOCOMMIT=0;
-LOCK TABLES `gastos_cartao` WRITE;
 /*!40000 ALTER TABLE `gastos_cartao` DISABLE KEYS */;
 /*!40000 ALTER TABLE `gastos_cartao` ENABLE KEYS */;
-UNLOCK TABLES;
 COMMIT;
 SET AUTOCOMMIT=@OLD_AUTOCOMMIT;
 DROP TABLE IF EXISTS `perfil_usuario`;
@@ -373,14 +351,12 @@ CREATE TABLE `perfil_usuario` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 SET @OLD_AUTOCOMMIT=@@AUTOCOMMIT, @@AUTOCOMMIT=0;
-LOCK TABLES `perfil_usuario` WRITE;
 /*!40000 ALTER TABLE `perfil_usuario` DISABLE KEYS */;
 INSERT INTO `perfil_usuario` VALUES
 (1,'Admin'),
 (4,'SuperAdmin'),
 (2,'Usuário');
 /*!40000 ALTER TABLE `perfil_usuario` ENABLE KEYS */;
-UNLOCK TABLES;
 COMMIT;
 SET AUTOCOMMIT=@OLD_AUTOCOMMIT;
 DROP TABLE IF EXISTS `transacoes`;
@@ -411,7 +387,6 @@ CREATE TABLE `transacoes` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 SET @OLD_AUTOCOMMIT=@@AUTOCOMMIT, @@AUTOCOMMIT=0;
-LOCK TABLES `transacoes` WRITE;
 /*!40000 ALTER TABLE `transacoes` DISABLE KEYS */;
 INSERT INTO `transacoes` VALUES
 (1,'2026-03-06','Salário – JOÃO DA SILVA',1565.00,'Despesa',21,'Carteira 1',0,1,1565.00,1565.00,NULL,0,10,0),
@@ -426,7 +401,6 @@ INSERT INTO `transacoes` VALUES
 (10,'2026-03-01','Diarista',0.00,'Despesa',21,'Consolidada',1,0,1000.00,0.00,1,0,1,0),
 (11,'2026-03-06','Combustível ',200.00,'Despesa',6,'Consolidada',0,1,500.00,200.00,6,0,1,1);
 /*!40000 ALTER TABLE `transacoes` ENABLE KEYS */;
-UNLOCK TABLES;
 COMMIT;
 SET AUTOCOMMIT=@OLD_AUTOCOMMIT;
 DROP TABLE IF EXISTS `usuario_carteira`;
@@ -443,7 +417,6 @@ CREATE TABLE `usuario_carteira` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 SET @OLD_AUTOCOMMIT=@@AUTOCOMMIT, @@AUTOCOMMIT=0;
-LOCK TABLES `usuario_carteira` WRITE;
 /*!40000 ALTER TABLE `usuario_carteira` DISABLE KEYS */;
 INSERT INTO `usuario_carteira` VALUES
 (6,10),
@@ -451,7 +424,6 @@ INSERT INTO `usuario_carteira` VALUES
 (7,11),
 (9,11);
 /*!40000 ALTER TABLE `usuario_carteira` ENABLE KEYS */;
-UNLOCK TABLES;
 COMMIT;
 SET AUTOCOMMIT=@OLD_AUTOCOMMIT;
 DROP TABLE IF EXISTS `usuarios`;
@@ -475,7 +447,6 @@ CREATE TABLE `usuarios` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 SET @OLD_AUTOCOMMIT=@@AUTOCOMMIT, @@AUTOCOMMIT=0;
-LOCK TABLES `usuarios` WRITE;
 /*!40000 ALTER TABLE `usuarios` DISABLE KEYS */;
 INSERT INTO `usuarios` VALUES
 (1,'admin','pbkdf2:sha256:1000000$Aqu4BrJZoveRIeP6$e079f8993a3ee1644485e17b111e3989b054c12417b432cf33ad2d5a3bbf4621','2026-02-22 08:26:55',NULL,0,4),
@@ -484,7 +455,6 @@ INSERT INTO `usuarios` VALUES
 (8,'user3','pbkdf2:sha256:600000$thFV6zlthPLmlNeb$f913f4ee7d5366e3e678bd49a77350a67945cb0aa8e91ccccf175bf922ec50d4','2026-03-06 14:25:47',1,0,2),
 (9,'user4','pbkdf2:sha256:600000$X0P5NAFlNNntZ3gU$50c0ce9b37d1b76367a43d9387ceac8d21a25c6c29f51fc4f0ac9da1784032e3','2026-03-06 14:26:07',1,0,2);
 /*!40000 ALTER TABLE `usuarios` ENABLE KEYS */;
-UNLOCK TABLES;
 COMMIT;
 SET AUTOCOMMIT=@OLD_AUTOCOMMIT;
 DROP TABLE IF EXISTS `vendas`;
@@ -510,7 +480,6 @@ CREATE TABLE `vendas` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 SET @OLD_AUTOCOMMIT=@@AUTOCOMMIT, @@AUTOCOMMIT=0;
-LOCK TABLES `vendas` WRITE;
 /*!40000 ALTER TABLE `vendas` DISABLE KEYS */;
 INSERT INTO `vendas` VALUES
 (1,'VALE3',5.000000,74.00,72.00,10.00,'2026-03-06','Carteira 1',10,1),
@@ -518,7 +487,6 @@ INSERT INTO `vendas` VALUES
 (3,'BOVA11',4.000000,176.39,174.00,9.56,'2026-03-06','Carteira 2',11,3),
 (4,'PETR4',10.000000,42.55,40.25,23.00,'2026-03-06','Carteira 2',11,1);
 /*!40000 ALTER TABLE `vendas` ENABLE KEYS */;
-UNLOCK TABLES;
 COMMIT;
 SET AUTOCOMMIT=@OLD_AUTOCOMMIT;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
