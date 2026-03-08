@@ -141,7 +141,7 @@
 
         .info-grid {
             display: grid;
-            grid-template-columns: 1fr 1fr;
+            grid-template-columns: 1fr 1fr 1fr;
             gap: 10px;
             margin-bottom: 10px;
             font-size: 14px;
@@ -227,7 +227,7 @@
 
             <!-- Basic Info -->
             <div class="info-grid">
-                <div class="info-item">
+                <div class="info-item" style="grid-column: span 2;">
                     <span class="info-label">Empregador</span>
                     <span class="info-value">{{ d.func.carteira_rel.nome if d.func.carteira_rel else '—' }}</span>
                 </div>
@@ -236,9 +236,25 @@
                     <span class="info-value">{% set part = d.folha.mes_referencia.split('-') if d.folha else
                         mes_ref.split('-') %}{{ meses_br[part[1]|int - 1] }} / {{ part[0] }}</span>
                 </div>
-                <div class="info-item" style="grid-column: span 2;">
+
+                <div class="info-item">
                     <span class="info-label">Trabalhador</span>
                     <span class="info-value">{{ d.func.nome }}</span>
+                </div>
+                <div class="info-item text-center">
+                    <span class="info-label">CPF</span>
+                    <span class="info-value">{{ d.func.cpf or '—' }}</span>
+                </div>
+                <div class="info-item text-end">
+                    <span class="info-label">FORMA DE PAGAMENTO</span>
+                    <span class="info-value">
+                        {{ d.folha.forma_pagamento if d.folha and d.folha.pago else '—' }}
+                        {% if d.folha and d.folha.pago and d.folha.forma_pagamento == 'Chave Pix' and d.func.chave_pix
+                        %}
+                        <div style="font-size: 10px; font-weight: normal; color: #666; margin-top: -2px;">{{
+                            d.func.chave_pix }}</div>
+                        {% endif %}
+                    </span>
                 </div>
             </div>
 

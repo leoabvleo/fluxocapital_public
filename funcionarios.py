@@ -3,7 +3,6 @@ from flask_login import login_required, current_user
 from auth import admin_required, is_superadmin
 from extensions import db
 from models import Funcionario, FuncionarioLancamento, FolhaPagamento, Transacao, Categoria, Carteira
-from utils import get_current_wallet
 from datetime import datetime, date
 from decimal import Decimal, InvalidOperation
 import calendar
@@ -20,8 +19,20 @@ def calcular_inss(salario_bruto, inss_percent=7.5):
 
 
 def get_carteira_ativa():
-    """Retorna o nome da carteira ativa (prioriza URL depois Sessão)."""
-    return get_current_wallet()
+    """Helper para obter a carteira ativa (ou lista delas) priorizando a URL e depois a Sessão."""
+    c_list = request.args.getlist('carteira')
+    if c_list:
+        if len(c_list) == 1 and c_list[0] == 'Consolidada':
+            c_ativa = 'Consolidada'
+        else:
+            if 'Consolidada' in c_list:
+                c_ativa = 'Consolidada'
+            else:
+                c_ativa = c_list if len(c_list) > 1 else c_list[0]
+        # Persiste na sessão para que links sem parâmetros mantenham a seleção
+        session['carteira_ativa'] = c_ativa
+        return c_ativa
+    return session.get('carteira_ativa', 'Consolidada')
 
 
 def get_funcionarios_query(ativo=None):
@@ -108,6 +119,7 @@ def add_funcionario():
     data_admissao_str = request.form.get('data_admissao', '')
     carteira_id = request.form.get('carteira_id') or get_carteira_id_ativa()
     inss_percent_str = request.form.get('inss_percent', '7.5').replace(',', '.')
+    chave_pix = request.form.get('chave_pix', '').strip() or None
 
     try:
         salario = Decimal(salario_str or '0')
@@ -124,7 +136,8 @@ def add_funcionario():
     func = Funcionario(
         nome=nome, cpf=cpf, salario_bruto=salario,
         data_admissao=data_admissao, carteira_id=int(carteira_id) if carteira_id else None,
-        inss_percent=Decimal(inss_percent_str or '7.5')
+        inss_percent=Decimal(inss_percent_str or '7.5'),
+        chave_pix=chave_pix
     )
     db.session.add(func)
     try:
@@ -159,6 +172,7 @@ def edit_funcionario(id):
     data_admissao_str = request.form.get('data_admissao', '')
     carteira_id = request.form.get('carteira_id')
     inss_percent_str = request.form.get('inss_percent', '7.5').replace(',', '.')
+    chave_pix = request.form.get('chave_pix', '').strip() or None
 
     if nome:
         func.nome = nome
@@ -177,6 +191,7 @@ def edit_funcionario(id):
     
     try:
         func.inss_percent = Decimal(inss_percent_str or '7.5')
+        func.chave_pix = chave_pix
     except InvalidOperation:
         pass
 
@@ -581,8 +596,11 @@ def pagar_folha(id):
         return redirect(url_for('funcionarios.folha', mes=mes_sel, ano=ano_sel))
 
     hoje = date.today()
+    forma_pg = request.form.get('forma_pagamento', 'Transferência')
+    
     folha_obj.pago = True
     folha_obj.data_pagamento = hoje
+    folha_obj.forma_pagamento = forma_pg
 
     try:
         cat_func = Categoria.query.filter(
@@ -596,22 +614,44 @@ def pagar_folha(id):
         carteira_id = carteira_rel.id if carteira_rel else None
         carteira_nome = carteira_rel.nome if carteira_rel else 'Consolidada'
 
-        nova_transacao = Transacao(
-            data=hoje,
-            descricao=f'Salário – {nome_func}',
-            valor=folha_obj.salario_liquido,
-            valor_previsto=folha_obj.salario_liquido,
-            valor_pago=folha_obj.salario_liquido,
-            tipo='Despesa',
-            categoria_id=cat_func.id if cat_func else None,
-            carteira_id=carteira_id,
-            carteira=carteira_nome,
-            pago=True,
-            fixa=False,
-        )
-        db.session.add(nova_transacao)
-        db.session.flush()
-        folha_obj.transacao_id = nova_transacao.id
+        # Busca transação existente para evitar duplicidade (ex: recorrente pendente)
+        dia_u = calendar.monthrange(int(ano_sel), int(mes_sel))[1]
+        inicio_m = date(int(ano_sel), int(mes_sel), 1)
+        fim_m = date(int(ano_sel), int(mes_sel), dia_u)
+        desc_busca = f'Salário – {nome_func}'
+        
+        trans_existente = Transacao.query.filter(
+            Transacao.descricao == desc_busca,
+            Transacao.data >= inicio_m,
+            Transacao.data <= fim_m,
+            Transacao.carteira_id == carteira_id,
+            Transacao.removida == False
+        ).first()
+
+        if trans_existente:
+            trans_existente.pago = True
+            trans_existente.data = hoje
+            trans_existente.valor = folha_obj.salario_liquido
+            trans_existente.valor_pago = folha_obj.salario_liquido
+            trans_existente.valor_previsto = 0
+            folha_obj.transacao_id = trans_existente.id
+        else:
+            nova_transacao = Transacao(
+                data=hoje,
+                descricao=desc_busca,
+                valor=folha_obj.salario_liquido,
+                valor_previsto=0,
+                valor_pago=folha_obj.salario_liquido,
+                tipo='Despesa',
+                categoria_id=cat_func.id if cat_func else None,
+                carteira_id=carteira_id,
+                carteira=carteira_nome,
+                pago=True,
+                fixa=False,
+            )
+            db.session.add(nova_transacao)
+            db.session.flush()
+            folha_obj.transacao_id = nova_transacao.id
 
         db.session.commit()
         flash(f'Salário de {nome_func} pago! Transação registrada na carteira.', 'success')

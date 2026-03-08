@@ -19,11 +19,6 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 
     <style>
-        .navbar.sticky-top {
-            z-index: 1060;
-            /* Garante que o menu fique sobre os cabeçalhos das tabelas */
-        }
-
         .privacy-value {
             transition: filter 0.2s ease;
         }
@@ -40,7 +35,8 @@
 
 <body class="d-flex flex-column min-vh-100">
 
-    <nav class="navbar navbar-expand-lg sticky-top">
+    <nav class="navbar navbar-expand-lg sticky-top"
+        style="z-index: 1050 !important; background-color: var(--bs-body-bg);">
         <div class="container">
             <a class="navbar-brand text-primary" href="/">
                 <i class="bi bi-graph-up-arrow me-2"></i>FluxoCapital
@@ -174,23 +170,23 @@
                     </div>
 
                     <script>
-                        // Lógica de seleção de carteiras
-                        document.addEventListener('DOMContentLoaded', function () {
-                            const conCheckbox = document.getElementById('navChkConsolidada');
-                            const otherCheckboxes = document.querySelectorAll('.nav-wallet-checkbox:not(#navChkConsolidada)');
+                        document.addEventListener('DOMContentLoaded', () => {
+                            const consolidadaChk = document.getElementById('navChkConsolidada');
+                            const otherChks = document.querySelectorAll('.nav-wallet-checkbox:not(#navChkConsolidada)');
 
-                            if (conCheckbox) {
-                                conCheckbox.addEventListener('change', function () {
+                            if (consolidadaChk) {
+                                consolidadaChk.addEventListener('change', function () {
                                     if (this.checked) {
-                                        otherCheckboxes.forEach(cb => cb.checked = true);
+                                        otherChks.forEach(chk => chk.checked = false);
                                     }
                                 });
                             }
 
-                            otherCheckboxes.forEach(cb => {
-                                cb.addEventListener('change', function () {
-                                    // Ao interagir com qualquer carteira individual, desmarca a Consolidada
-                                    if (conCheckbox) conCheckbox.checked = false;
+                            otherChks.forEach(chk => {
+                                chk.addEventListener('change', function () {
+                                    if (this.checked && consolidadaChk) {
+                                        consolidadaChk.checked = false;
+                                    }
                                 });
                             });
                         });
@@ -205,11 +201,7 @@
                             if (values.includes('Consolidada') || values.length === 0) {
                                 url.searchParams.set('carteira', 'Consolidada');
                             } else {
-                                if (values.length > 0) {
-                                    values.forEach(v => url.searchParams.append('carteira', v));
-                                } else {
-                                    url.searchParams.set('carteira', 'Consolidada');
-                                }
+                                values.forEach(v => url.searchParams.append('carteira', v));
                             }
 
                             window.location.href = url.href;

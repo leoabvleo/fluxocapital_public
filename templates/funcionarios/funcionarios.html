@@ -134,18 +134,31 @@
                                                 value="{{ f.nome }}" required>
                                         </div>
                                         <div class="mb-2">
-                                            <label class="form-label fw-bold" style="font-size:.75rem">CPF</label>
-                                            <input type="text" name="cpf" class="form-control form-control-sm cpf-input"
-                                                value="{{ f.cpf or '' }}" placeholder="000.000.000-00" maxlength="14">
+                                            <label class="form-label fw-bold" style="font-size:.75rem">CPF *</label>
+                                            <input type="text" name="cpf" class="form-control form-control-sm"
+                                                value="{{ f.cpf or '' }}" placeholder="000.000.000-00" maxlength="14"
+                                                required autocomplete="off" inputmode="numeric">
+                                            <div class="invalid-feedback">CPF obrigatório e deve ser válido
+                                                (000.000.000-00).</div>
                                         </div>
-                                        <div class="mb-2">
-                                            <label class="form-label fw-bold" style="font-size:.75rem">CARTEIRA</label>
-                                            <select name="carteira_id" class="form-select form-select-sm" required>
-                                                {% for c in carteiras %}
-                                                <option value="{{ c.id }}" {% if f.carteira_id==c.id %}selected{% endif
-                                                    %}>{{ c.nome }}</option>
-                                                {% endfor %}
-                                            </select>
+                                        <div class="row g-2">
+                                            <div class="col-6 mb-2">
+                                                <label class="form-label fw-bold"
+                                                    style="font-size:.75rem">CARTEIRA</label>
+                                                <select name="carteira_id" class="form-select form-select-sm" required>
+                                                    {% for c in carteiras %}
+                                                    <option value="{{ c.id }}" {% if f.carteira_id==c.id %}selected{%
+                                                        endif %}>{{ c.nome }}</option>
+                                                    {% endfor %}
+                                                </select>
+                                            </div>
+                                            <div class="col-6 mb-2">
+                                                <label class="form-label fw-bold" style="font-size:.75rem">CHAVE
+                                                    PIX</label>
+                                                <input type="text" name="chave_pix" class="form-control form-control-sm"
+                                                    value="{{ f.chave_pix or '' }}"
+                                                    placeholder="CPF, E-mail, Celular...">
+                                            </div>
                                         </div>
                                         <div class="row g-2">
                                             <div class="col-6 mb-2">
@@ -273,18 +286,26 @@
                             placeholder="Ex: João da Silva" required>
                     </div>
                     <div class="mb-2">
-                        <label class="form-label fw-bold" style="font-size:.75rem">CPF</label>
-                        <input type="text" name="cpf" class="form-control form-control-sm cpf-input"
-                            placeholder="000.000.000-00" maxlength="14">
+                        <label class="form-label fw-bold" style="font-size:.75rem">CPF *</label>
+                        <input type="text" name="cpf" class="form-control form-control-sm" placeholder="000.000.000-00"
+                            maxlength="14" required autocomplete="off" inputmode="numeric">
+                        <div class="invalid-feedback">CPF obrigatório e deve ser válido (000.000.000-00).</div>
                     </div>
-                    <div class="mb-2">
-                        <label class="form-label fw-bold" style="font-size:.75rem">CARTEIRA</label>
-                        <select name="carteira_id" class="form-select form-select-sm" required>
-                            {% for c in carteiras %}
-                            <option value="{{ c.id }}" {% if c.nome==c_ativa or (c_ativa=='Consolidada' and loop.first)
-                                %}selected{% endif %}>{{ c.nome }}</option>
-                            {% endfor %}
-                        </select>
+                    <div class="row g-2">
+                        <div class="col-6 mb-2">
+                            <label class="form-label fw-bold" style="font-size:.75rem">CARTEIRA</label>
+                            <select name="carteira_id" class="form-select form-select-sm" required>
+                                {% for c in carteiras %}
+                                <option value="{{ c.id }}" {% if c.nome==c_ativa or (c_ativa=='Consolidada' and
+                                    loop.first) %}selected{% endif %}>{{ c.nome }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="col-6 mb-2">
+                            <label class="form-label fw-bold" style="font-size:.75rem">CHAVE PIX</label>
+                            <input type="text" name="chave_pix" class="form-control form-control-sm"
+                                placeholder="CPF, E-mail, Celular...">
+                        </div>
                     </div>
                     <div class="row g-2">
                         <div class="col-md-6 mb-2">
@@ -312,78 +333,100 @@
 </div>
 {% endif %}
 
+{% endblock %}
+
 {% block scripts %}
 <script>
-    document.addEventListener('DOMContentLoaded', function () {
-        const cpfInputs = document.querySelectorAll('.cpf-input');
+    (function () {
+        /**
+         * Validação matemática completa de CPF
+         */
+        function isValidCPF(str) {
+            var cpf = str.replace(/\D/g, '');
+            if (cpf.length !== 11 || /^(\d)\1+$/.test(cpf)) return false;
 
-        cpfInputs.forEach(input => {
-            // Aplica máscara ao digitar
-            input.addEventListener('input', function (e) {
-                let value = e.target.value.replace(/\D/g, '');
-                if (value.length > 11) value = value.slice(0, 11);
-
-                if (value.length > 9) {
-                    value = value.replace(/^(\d{3})(\d{3})(\d{3})(\d{2})$/, "$1.$2.$3-$4");
-                } else if (value.length > 6) {
-                    value = value.replace(/^(\d{3})(\d{3})(\d{0,3})$/, "$1.$2.$3");
-                } else if (value.length > 3) {
-                    value = value.replace(/^(\d{3})(\d{0,3})$/, "$1.$2");
-                }
-                e.target.value = value;
-            });
-
-            // Função auxiliar de validação
-            const validateAndShowError = () => {
-                const cpfValue = input.value.replace(/\D/g, '');
-                if (cpfValue && !validateCPF(cpfValue)) {
-                    input.classList.add('is-invalid');
-
-                    let feedback = input.nextElementSibling;
-                    if (!feedback || !feedback.classList.contains('invalid-feedback')) {
-                        feedback = document.createElement('div');
-                        feedback.className = 'invalid-feedback';
-                        feedback.innerText = 'CPF inválido.';
-                        input.after(feedback);
-                    }
-                    return false;
-                } else {
-                    input.classList.remove('is-invalid');
-                    return true;
-                }
-            };
-
-            // Valida ao sair do campo (blur)
-            input.addEventListener('blur', validateAndShowError);
-
-            // Valida ao enviar o formulário
-            const form = input.closest('form');
-            if (form) {
-                form.addEventListener('submit', function (e) {
-                    if (!validateAndShowError()) {
-                        e.preventDefault();
-                        input.focus();
-                    }
-                });
-            }
-        });
-
-        function validateCPF(cpf) {
-            if (cpf.length !== 11 || !!cpf.match(/(\d)\1{10}/)) return false;
-            let add = 0;
-            for (let i = 0; i < 9; i++) add += parseInt(cpf.charAt(i)) * (10 - i);
-            let rev = 11 - (add % 11);
+            var add = 0;
+            for (var i = 0; i < 9; i++) add += parseInt(cpf.charAt(i)) * (10 - i);
+            var rev = 11 - (add % 11);
             if (rev === 10 || rev === 11) rev = 0;
             if (rev !== parseInt(cpf.charAt(9))) return false;
+
             add = 0;
-            for (let i = 0; i < 10; i++) add += parseInt(cpf.charAt(i)) * (11 - i);
+            for (var i = 0; i < 10; i++) add += parseInt(cpf.charAt(i)) * (11 - i);
             rev = 11 - (add % 11);
             if (rev === 10 || rev === 11) rev = 0;
             if (rev !== parseInt(cpf.charAt(10))) return false;
+
             return true;
         }
-    });
-</script>
-{% endblock %}
 
+        /**
+         * Máscara progressiva
+         */
+        function maskCPF(v) {
+            v = v.replace(/\D/g, ""); // REMOVE LETRAS IMEDIATAMENTE
+            if (v.length > 11) v = v.substring(0, 11);
+            if (v.length <= 3) return v;
+            if (v.length <= 6) return v.substring(0, 3) + "." + v.substring(3);
+            if (v.length <= 9) return v.substring(0, 3) + "." + v.substring(3, 6) + "." + v.substring(6);
+            return v.substring(0, 3) + "." + v.substring(3, 6) + "." + v.substring(6, 9) + "-" + v.substring(9);
+        }
+
+        /**
+         * Aplica comportamento aos inputs
+         */
+        function initCPF() {
+            var inputs = document.querySelectorAll('input[name="cpf"]');
+            for (var i = 0; i < inputs.length; i++) {
+                (function (input) {
+                    if (input.getAttribute('data-cpf-ok')) return;
+                    input.setAttribute('data-cpf-ok', 'true');
+
+                    // 1. Bloqueio de letras e máscara ao digitar
+                    input.addEventListener('input', function () {
+                        var start = this.selectionStart;
+                        var oldLen = this.value.length;
+                        this.value = maskCPF(this.value);
+                        var newLen = this.value.length;
+
+                        // Ajusta cursor se necessário
+                        if (start !== null) {
+                            var pos = start + (newLen - oldLen);
+                            this.setSelectionRange(pos, pos);
+                        }
+
+                        if (!this.value) this.classList.remove('is-invalid');
+                    });
+
+                    // 2. Validação ao sair (blur)
+                    input.addEventListener('blur', function () {
+                        if (!isValidCPF(this.value)) {
+                            this.classList.add('is-invalid');
+                        } else {
+                            this.classList.remove('is-invalid');
+                        }
+                    });
+
+                    // 3. Validação ao enviar
+                    var form = input.closest('form');
+                    if (form) {
+                        form.addEventListener('submit', function (e) {
+                            if (!isValidCPF(input.value)) {
+                                e.preventDefault();
+                                e.stopPropagation();
+                                input.classList.add('is-invalid');
+                                input.focus();
+                            }
+                        });
+                    }
+                })(inputs[i]);
+            }
+        }
+
+        // Execução em múltiplos estágios para garantir carregamento
+        initCPF();
+        document.addEventListener('DOMContentLoaded', initCPF);
+        window.addEventListener('load', initCPF);
+    })();
+</script>
 {% endblock %}

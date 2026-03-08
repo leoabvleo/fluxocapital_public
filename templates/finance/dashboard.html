@@ -301,7 +301,7 @@
 
                                 <!-- Coluna DESCRIÇÃO -->
                                 <td class="text-start ps-2 py-1 p-0">
-                                    {% if current_user.perfil.nome == 'Admin' %}
+                                    {% if is_admin_or_superadmin %}
                                     <form action="{{ url_for('finance.update_valor') }}" method="POST">
                                         <input type="hidden" name="id" value="{{ t.id }}">
                                         <input type="hidden" name="campo" value="descricao">
@@ -317,7 +317,6 @@
                                                 <i class="bi bi-eye"></i>
                                             </a>
                                             {% endif %}
-
                                             {% if t.categoria %}
                                             <span class="text-muted mx-1 tiny"><i
                                                     class="bi {{ t.categoria.icone }}"></i></span>
@@ -402,28 +401,24 @@
         <div class="modal-content border-0 shadow">
             <div class="modal-header border-0 bg-light py-2">
                 <h6 class="modal-title fw-bold text-uppercase">Nova Transação</h6>
-                <button type="button" class="btn-close" data-bs-modal="modal" aria-label="Close"></button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body py-3">
                 <form action="{{ url_for('finance.add_transacao') }}" method="POST">
                     <input type="hidden" name="mes_sel" value="{{ mes_sel }}">
                     <input type="hidden" name="ano_sel" value="{{ ano_sel }}">
                     <div class="row g-2">
-                        <div class="col-md-4 mb-2">
+                        <div class="col-md-6 mb-2">
                             <label class="form-label tiny fw-bold text-uppercase">Data</label>
                             <input type="date" name="data" class="form-control form-control-sm" value="{{ hoje }}"
                                 required>
                         </div>
-                        <div class="col-md-4 mb-2">
+                        <div class="col-md-6 mb-2">
                             <label class="form-label tiny fw-bold text-uppercase">Tipo</label>
-                            <select name="tipo" class="form-select form-select-sm">
+                            <select name="tipo" id="selectTipoAdd" class="form-select form-select-sm">
                                 <option value="Despesa">Despesa</option>
                                 <option value="Receita">Receita</option>
                             </select>
-                        </div>
-                        <div class="col-md-4 mb-2">
-                            <label class="form-label tiny fw-bold text-uppercase">Posição</label>
-                            <input type="number" name="posicao" class="form-control form-control-sm" value="0">
                         </div>
                     </div>
                     <div class="mb-2">
@@ -439,7 +434,7 @@
                         </div>
                         <div class="col-md-6 mb-2">
                             <label class="form-label tiny fw-bold text-uppercase">Categoria</label>
-                            <select name="categoria_id" class="form-select form-select-sm">
+                            <select name="categoria_id" id="selectCategoriaAdd" class="form-select form-select-sm">
                                 <option value="">Sem Categoria</option>
                                 {% for cat in categorias %}
                                 <option value="{{ cat.id }}">{{ cat.nome }}</option>
@@ -464,6 +459,40 @@
 </div>
 
 <script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const selectTipo = document.getElementById("selectTipoAdd");
+        const selectCategoria = document.getElementById("selectCategoriaAdd");
+
+        if (selectTipo && selectCategoria) {
+            function updateDefaultCategory() {
+                const tipo = selectTipo.value;
+                const targetText = tipo === 'Despesa' ? 'Outras Despesas' : 'Outras Receitas';
+
+                // Find the option with this text
+                for (let i = 0; i < selectCategoria.options.length; i++) {
+                    if (selectCategoria.options[i].text === targetText) {
+                        selectCategoria.selectedIndex = i;
+                        break;
+                    }
+                }
+            }
+
+            selectTipo.addEventListener("change", updateDefaultCategory);
+
+            // Set default on load
+            updateDefaultCategory();
+
+            // Set default when modal is shown
+            const modalAddTransacao = document.getElementById('modalAddTransacao');
+            if (modalAddTransacao) {
+                modalAddTransacao.addEventListener('show.bs.modal', function () {
+                    selectTipo.value = "Despesa"; // Reset to Despesa by default
+                    updateDefaultCategory();
+                });
+            }
+        }
+    });
+
     function sortTable(tableId, n, type) {
         var table, rows, switching, i, x, y, shouldSwitch, dir, switchcount = 0;
         table = document.getElementById(tableId);

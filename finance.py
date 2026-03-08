@@ -3,7 +3,6 @@ from flask_login import login_required, current_user
 from auth import admin_required, is_superadmin
 from extensions import db
 from models import Transacao, Categoria, ConfigFinanceiraFixa, Ativo, Dividendo, GastoCartao, Carteira
-from utils import get_current_wallet, get_authorized_query
 from datetime import datetime, date
 from decimal import Decimal, InvalidOperation
 import calendar
@@ -14,8 +13,90 @@ from collections import defaultdict
 from sqlalchemy import case as sa_case
 import pandas as pd
 
+ 
 finance_bp = Blueprint('finance', __name__, template_folder='templates')
+ 
+def get_current_wallet():
+    """Helper para obter a carteira ativa (ou lista delas) priorizando a URL e depois a Sessão."""
+    c_list = request.args.getlist('carteira')
+    if c_list:
+        if len(c_list) == 1 and c_list[0] == 'Consolidada':
+            c_ativa = 'Consolidada'
+        else:
+            if 'Consolidada' in c_list:
+                c_ativa = 'Consolidada'
+            else:
+                c_ativa = c_list if len(c_list) > 1 else c_list[0]
+        # Persiste na sessão para que links sem parâmetros mantenham a seleção
+        session['carteira_ativa'] = c_ativa
+        return c_ativa
+    return session.get('carteira_ativa', 'Consolidada')
 
+def get_authorized_query(model, c_ativa):
+    """Retorna uma query filtrada pelas permissões do usuário e carteira ativa.
+    
+    SuperAdmin: acesso irrestrito a todos os dados.
+    Admin: acesso às suas carteiras atribuídas (com escrita).
+    Usuário: acesso somente leitura às suas carteiras atribuídas.
+    """
+    query = model.query
+    
+    # Se c_ativa for uma lista, tratamos como múltipla seleção
+    is_multi = isinstance(c_ativa, list)
+    
+    # SuperAdmin tem acesso total — sem filtro de carteira
+    if is_superadmin():
+        if c_ativa == 'Consolidada':
+            return query
+        
+        if is_multi:
+            if hasattr(model, 'carteira_id'):
+                ids = [c.id for c in Carteira.query.filter(Carteira.nome.in_(c_ativa)).all()]
+                return query.filter(model.carteira_id.in_(ids))
+            else:
+                return query.filter(model.carteira.in_(c_ativa))
+        else:
+            c_obj = Carteira.query.filter_by(nome=c_ativa).first()
+            if c_obj:
+                if hasattr(model, 'carteira_id'):
+                    return query.filter_by(carteira_id=c_obj.id)
+                else:
+                    return query.filter_by(carteira=c_ativa)
+            return query.filter(False)
+    
+    # Admin e Usuário: filtrar pelas carteiras atribuídas
+    accessible_wallets = current_user.carteiras
+    wallet_ids = [c.id for c in accessible_wallets]
+    wallet_nomes = [c.nome for c in accessible_wallets]
+    
+    if not wallet_ids:
+        return query.filter(False)
+        
+    if c_ativa == 'Consolidada':
+        if hasattr(model, 'carteira_id'):
+            return query.filter(model.carteira_id.in_(wallet_ids))
+        else:
+            return query.filter(model.carteira.in_(wallet_nomes))
+    
+    if is_multi:
+        # Pega apenas as carteiras que o usuário realmente tem acesso
+        final_nomes = [n for n in c_ativa if n in wallet_nomes]
+        if not final_nomes:
+            return query.filter(False)
+        if hasattr(model, 'carteira_id'):
+            final_ids = [c.id for c in accessible_wallets if c.nome in final_nomes]
+            return query.filter(model.carteira_id.in_(final_ids))
+        else:
+            return query.filter(model.carteira.in_(final_nomes))
+    else:
+        # Carteira específica única
+        c_obj = Carteira.query.filter_by(nome=c_ativa).first()
+        if c_obj and c_obj in accessible_wallets:
+            if hasattr(model, 'carteira_id'):
+                return query.filter_by(carteira_id=c_obj.id)
+            else:
+                return query.filter_by(carteira=c_ativa)
+        return query.filter(False)
 
 def gerar_recorrentes(mes=None, ano=None, c_ativa='Consolidada'):
     """Gera as receitas e despesas fixas para o mês/ano especificado."""
@@ -185,6 +266,7 @@ def update_valor():
         if campo == 'valor_pago' and val_decimal > 0:
             t.pago = True
             t.valor = val_decimal
+            t.valor_previsto = 0
         elif campo == 'valor_pago' and val_decimal == 0:
             t.pago = False
             t.valor = 0
@@ -205,7 +287,7 @@ def add_transacao():
     valor = request.form.get('valor').replace(',', '.')
     tipo = request.form.get('tipo')
     categoria_id = request.form.get('categoria_id')
-    carteira = get_current_wallet()
+    carteira = session.get('carteira_ativa', 'Consolidada')
     c_obj = Carteira.query.filter_by(nome=carteira).first()
     c_id = c_obj.id if c_obj else None
     
@@ -260,6 +342,10 @@ def relatorio_anual():
     ano = int(request.args.get('ano', date.today().year))
     filtro = request.args.get('filtro', 'tudo')  # tudo, receitas, despesas, aportes
     c_ativa = get_current_wallet()
+    # Para consistência com o template que espera c_list
+    c_list = request.args.getlist('carteira')
+    if not c_list and c_ativa != 'Consolidada':
+        c_list = [c_ativa] if not isinstance(c_ativa, list) else c_ativa
     
     # Busca todas as transações do ano que não foram removidas usando query autorizada
     query = get_authorized_query(Transacao, c_ativa).filter(
@@ -399,8 +485,11 @@ def relatorio_mensal():
     mes_sel = int(request.args.get('mes', hoje.month))
     ano_sel = int(request.args.get('ano', hoje.year))
     filtro = request.args.get('filtro', 'tudo') # tudo, receitas, despesas, aportes
-    
     c_ativa = get_current_wallet()
+    # Para consistência com o template que espera c_list
+    c_list = request.args.getlist('carteira')
+    if not c_list and c_ativa != 'Consolidada':
+        c_list = [c_ativa] if not isinstance(c_ativa, list) else c_ativa
     
     inicio_mes = date(ano_sel, mes_sel, 1)
     fim_mes = date(ano_sel, mes_sel, calendar.monthrange(ano_sel, mes_sel)[1])
@@ -496,7 +585,7 @@ def add_config_fixa():
     tipo = request.form.get('tipo', 'Despesa')
     categoria_id = request.form.get('categoria_id')
     posicao = int(request.form.get('posicao', 0))
-    c_ativa = get_current_wallet()
+    c_ativa = session.get('carteira_ativa', 'Consolidada')
     c_obj = Carteira.query.filter_by(nome=c_ativa).first()
     
     nova = ConfigFinanceiraFixa(
@@ -588,7 +677,7 @@ def add_categoria():
         
         # Se for Admin, vincula a uma carteira que o usuário possui
         if not is_superadmin():
-            c_ativa = get_current_wallet()
+            c_ativa = session.get('carteira_ativa', 'Consolidada')
             c_obj = Carteira.query.filter_by(nome=c_ativa).first()
             
             # Se estiver em 'Consolidada' ou em uma carteira que não possui, usa a primeira disponível
@@ -888,7 +977,7 @@ def salvar_confirmacao_despesas():
 
         carteiras_cache = {c.nome: c for c in Carteira.query.all()}
         categorias_cache = {c.nome.upper(): c.id for c in Categoria.query.all()}
-        c_sessao_nome = get_current_wallet()
+        c_sessao_nome = session.get('carteira_ativa', 'Consolidada')
         c_sessao_obj  = carteiras_cache.get(c_sessao_nome)
 
         count     = 0
