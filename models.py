@@ -204,6 +204,7 @@ class FolhaPagamento(db.Model):
     outros_descontos = db.Column(db.Numeric(15, 2), nullable=False, default=0.0)
     salario_liquido = db.Column(db.Numeric(15, 2), nullable=False, default=0.0)
     data_pagamento = db.Column(db.Date, nullable=True)
+    forma_pagamento = db.Column(db.String(50), nullable=True)
     pago = db.Column(db.Boolean, default=False)
     transacao_id = db.Column(db.Integer, db.ForeignKey('transacoes.id'), nullable=True)
 
