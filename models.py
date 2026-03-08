@@ -172,6 +172,7 @@ class Funcionario(db.Model):
     ativo = db.Column(db.Boolean, default=True)
     carteira_id = db.Column(db.Integer, db.ForeignKey('carteiras.id'), nullable=True)
     inss_percent = db.Column(db.Numeric(5, 2), nullable=False, default=7.5)
+    chave_pix = db.Column(db.String(255), nullable=True)
 
     carteira_rel = db.relationship('Carteira', backref=db.backref('funcionarios', lazy=True))
     lancamentos = db.relationship('FuncionarioLancamento', backref=db.backref('funcionario', lazy=True), lazy='dynamic', cascade='all, delete-orphan')

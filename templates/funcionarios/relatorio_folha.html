@@ -249,8 +249,7 @@
                     <span class="info-label">FORMA DE PAGAMENTO</span>
                     <span class="info-value">
                         {{ d.folha.forma_pagamento if d.folha and d.folha.pago else '—' }}
-                        {% if d.folha and d.folha.pago and d.folha.forma_pagamento == 'Chave Pix' and d.func.chave_pix
-                        %}
+                        {% if d.folha and d.folha.pago and (d.folha.forma_pagamento == 'Chave Pix' or d.folha.forma_pagamento == 'CachePix') and d.func.chave_pix %}
                         <div style="font-size: 10px; font-weight: normal; color: #666; margin-top: -2px;">{{
                             d.func.chave_pix }}</div>
                         {% endif %}
