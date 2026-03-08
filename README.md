@@ -79,7 +79,7 @@ mysql -u root -p -e "CREATE DATABASE db_fluxocapital;"
 mysql -u root -p -e "CREATE USER 'user_fluxocapital'@'localhost' IDENTIFIED BY '1qhnTXZDCz8P4cB7n';"
 mysql -u root -p -e "GRANT ALL PRIVILEGES ON db_fluxocapital.* TO 'user_fluxocapital'@'localhost';"
 mysql -u root -p -e "FLUSH PRIVILEGES;"
-mysql -u root -p db_fluxocapital < db_fluxocapital_sync.sql
+mysql -u root -p db_fluxocapital < db_fluxocapital.sql
 ```
 
 
