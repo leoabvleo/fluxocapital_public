@@ -3,8 +3,8 @@
 echo "================================================="
 echo "   Configuração do Banco de Dados FluxoCapital   "
 echo "================================================="
-echo "Este script criará o banco de dados, o usuário padrão"
-echo "e importará os dados de teste."
+echo "Este script criará o banco de dados (db_fluxocapital), o usuário padrão"
+echo "(user_fluxocapital) e importará os dados de teste."
 echo ""
 
 # Detecta acesso root ao MySQL
@@ -66,10 +66,10 @@ else
 fi
 
 
-echo "[6/6] Importando dados de teste do arquivo db_fluxocapital_sync.sql..."
+echo "[6/6] Importando dados de teste do arquivo db_fluxocapital.sql..."
 
-if [ -f "db_fluxocapital_sync.sql" ]; then
-    if $MYSQL_CMD -D db_fluxocapital < db_fluxocapital_sync.sql; then
+if [ -f "db_fluxocapital.sql" ]; then
+    if $MYSQL_CMD -D db_fluxocapital < db_fluxocapital.sql; then
         echo ""
         echo "✅ Banco de dados configurado e populado com sucesso!"
     else
@@ -78,7 +78,7 @@ if [ -f "db_fluxocapital_sync.sql" ]; then
         exit 1
     fi
 else
-    echo "❌ Erro: Arquivo db_fluxocapital_sync.sql não encontrado no diretório atual!"
+    echo "❌ Erro: Arquivo db_fluxocapital.sql não encontrado no diretório atual!"
     exit 1
 fi
 

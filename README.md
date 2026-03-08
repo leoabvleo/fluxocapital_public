@@ -61,7 +61,7 @@ O sistema utiliza uma arquitetura modular baseada em **Blueprints** do Flask par
 - Dependências listadas em `requirements.txt`
 
 ### Configuração do Banco de Dados:
-A aplicação vem com um banco de dados de testes em `db_fluxocapital_sync.sql`.
+A aplicação vem com um banco de dados de testes em `db_fluxocapital.sql`.
 As credenciais padrão da aplicação são:
 - **Usuário:** `user_fluxocapital`
 - **Senha:** `1qhnTXZDCz8P4cB7n`
