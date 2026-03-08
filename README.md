@@ -8,11 +8,15 @@ Este é um ecossistema completo de gestão financeira pessoal e de investimentos
 O sistema utiliza uma arquitetura modular baseada em **Blueprints** do Flask para separar a lógica de investimentos da lógica de finanças pessoais.
 
 ### Componentes Principais:
-- **`app.py`**: Ponto de entrada da aplicação, gestão de autenticação, rotas de ativos e integração de dividendos.
-- **`finance.py`**: Módulo dedicado ao fluxo de caixa, gestão de despesas fixas, variáveis e relatórios detalhados.
-- **`models.py`**: Definição do esquema da base de dados (MariaDB) utilizando SQLAlchemy.
-- **`card_parser.py`**: Utilitário de automação que utiliza `pdfplumber` para extrair dados de faturas de cartão de crédito (ex: XP Investimentos).
-- **`extensions.py`**: Centralização de extensões (DB, LoginManager) para evitar importações circulares.
+- **`app.py`**: Ponto de entrada da aplicação Flask. Centraliza a configuração do sistema, gestão de autenticação, rotas principais de ativos de investimento e a integração de Blueprints.
+- **`auth.py`**: Utilitários de segurança e controle de acesso (RBAC). Define decoradores para restringir rotas a perfis específicos como `Admin` e `SuperAdmin`.
+- **`finance.py`**: Módulo (Blueprint) dedicado ao fluxo de caixa pessoal. Gerencia transações, categorias de despesas, contas fixas e gera relatórios financeiros detalhados.
+- **`funcionarios.py`**: Módulo (Blueprint) para gestão de RH. Controla o cadastro de funcionários, lançamentos de adiantamentos/descontos, processamento de folha de pagamento e recibos.
+- **`models.py`**: Definição do esquema do banco de dados MariaDB/MySQL utilizando o SQLAlchemy ORM, mapeando todas as entidades do sistema.
+- **`card_parser.py`**: Script de automação que utiliza `pdfplumber` para extrair dados de faturas de cartão de crédito em PDF, automatizando o lançamento de gastos.
+- **`update_prices.py`**: Utilitário que consome APIs financeiras para atualizar cotações de ativos, indicadores (P/VP) e o câmbio (USD/BRL) no banco de dados.
+- **`utils.py`**: Funções auxiliares compartilhadas, como a lógica de filtragem de dados por carteira ativa e autorização de consultas baseada no perfil do usuário.
+- **`extensions.py`**: Centralização da inicialização das extensões do Flask (DB, LoginManager) para garantir a integridade das importações no projeto.
 
 ## 🛠️ Funcionalidades Detalhadas
 
@@ -24,7 +28,20 @@ O sistema utiliza uma arquitetura modular baseada em **Blueprints** do Flask par
 ### 💳 Finanças Pessoais
 - **Importação de PDF**: Lançamento automático de gastos de cartão de crédito através da leitura da fatura.
 - **Despesas Fixas**: Geração automática de contas recorrentes no início de cada mês.
-- **Multicarteiras**: Separação de fluxos financeiros por perfil (ex: Pessoal vs. Família).
+- **Multicarteiras**: Separação de fluxos financeiros por perfil (ex: Pessoal vs. Família) com controle de acesso granular.
+
+### 👥 Gestão de Funcionários (RH)
+- **Ciclo de Vida**: Cadastro completo de funcionários ativos e inativos, controle de admissão, CPF e dados bancários/PIX.
+- **Gestão de Lançamentos**: Registro individual de adiantamentos, vales e descontos extras.
+- **Folha de Pagamento**: Processamento automatizado de salários com cálculo de INSS, integração direta com o fluxo de caixa e geração de recibos.
+- **Extrato do Colaborador**: Painel histórico que consolida todos os pagamentos e descontos de um funcionário ao longo do tempo.
+
+### 📊 Relatórios e Inteligência
+- **Dashboard Financeiro**: Visão consolidada de saldo, receitas e despesas com indicadores de performance mensal.
+- **Relatórios Anuais e Mensais**: Tabelas detalhadas de fluxo de caixa, agrupadas por categoria e subcategoria.
+- **Análise Visual**: Gráficos dinâmicos para acompanhamento de despesas por categoria e evolução patrimonial.
+- **Relatório de Folha**: Resumo executivo de custos com pessoal por carteira e período.
+- **Performance de Ativos**: Relatórios de Yield on Cost, preço médio e evolução de dividendos recebidos.
 
 ---
 
