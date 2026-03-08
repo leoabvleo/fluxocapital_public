@@ -7,9 +7,7 @@ echo "Este script criará o banco de dados, o usuário padrão"
 echo "e importará os dados de teste."
 echo ""
 
-# Tenta conectar como root sem senha primeiro
-# Nota: No Mac/Linux, se o MySQL estiver usando auth_socket para o root, 
-# ele não pedirá senha mas exigirá que você seja o usuário do sistema correspondente (ou sudo).
+# Detecta acesso root ao MySQL
 if mysql -u root -e "exit" >/dev/null 2>&1; then
     echo "Identificado: MySQL root acessível sem senha."
     MYSQL_CMD="mysql -u root"
@@ -19,7 +17,7 @@ else
     echo ""
     read -s -p "Digite a senha do root do MySQL/MariaDB (ou deixe em branco para tentar sem): " MYSQL_ROOT_PASSWORD
     echo ""
-    
+
     if [ -z "$MYSQL_ROOT_PASSWORD" ]; then
         MYSQL_CMD="mysql -u root"
     else
@@ -27,23 +25,36 @@ else
     fi
 fi
 
-echo "[1/5] Criando o banco de dados 'db_fluxocapital'..."
-if ! $MYSQL_CMD -e "CREATE DATABASE IF NOT EXISTS db_fluxocapital;" 2>/dev/null; then
-    echo "⚠️  Não foi possível criar o banco com 'mysql -u root'. Tentando com sudo..."
+
+echo "[1/6] Recriando o banco de dados 'db_fluxocapital'..."
+
+if ! $MYSQL_CMD -e "DROP DATABASE IF EXISTS db_fluxocapital;" 2>/dev/null; then
+    echo "⚠️  Não foi possível acessar MySQL como root. Tentando com sudo..."
     MYSQL_CMD="sudo mysql -u root"
-    $MYSQL_CMD -e "CREATE DATABASE IF NOT EXISTS db_fluxocapital;"
 fi
 
-echo "[2/5] Criando o usuário 'user_fluxocapital'..."
-$MYSQL_CMD -e "CREATE USER IF NOT EXISTS 'user_fluxocapital'@'localhost' IDENTIFIED BY '1qhnTXZDCz8P4cB7n';" 2>/dev/null || $MYSQL_CMD -e "ALTER USER 'user_fluxocapital'@'localhost' IDENTIFIED BY '1qhnTXZDCz8P4cB7n';"
+$MYSQL_CMD -e "DROP DATABASE IF EXISTS db_fluxocapital;"
+$MYSQL_CMD -e "CREATE DATABASE db_fluxocapital CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;"
 
-echo "[3/5] Concedendo permissões..."
+
+echo "[2/6] Criando o usuário 'user_fluxocapital'..."
+
+$MYSQL_CMD -e "CREATE USER IF NOT EXISTS 'user_fluxocapital'@'localhost' IDENTIFIED BY '1qhnTXZDCz8P4cB7n';" 2>/dev/null \
+|| $MYSQL_CMD -e "ALTER USER 'user_fluxocapital'@'localhost' IDENTIFIED BY '1qhnTXZDCz8P4cB7n';"
+
+
+echo "[3/6] Concedendo permissões..."
+
 $MYSQL_CMD -e "GRANT ALL PRIVILEGES ON db_fluxocapital.* TO 'user_fluxocapital'@'localhost';"
 
-echo "[4/5] Atualizando privilégios..."
+
+echo "[4/6] Atualizando privilégios..."
+
 $MYSQL_CMD -e "FLUSH PRIVILEGES;"
 
-echo "[5/5] Criando arquivo .env de configuração local..."
+
+echo "[5/6] Criando arquivo .env de configuração local..."
+
 if [ ! -f ".env" ]; then
     echo "DB_USER=user_fluxocapital" > .env
     echo "DB_PASS=1qhnTXZDCz8P4cB7n" >> .env
@@ -54,7 +65,9 @@ else
     echo "ℹ️  Arquivo .env já existe, mantendo as configurações atuais."
 fi
 
+
 echo "[6/6] Importando dados de teste do arquivo db_fluxocapital_sync.sql..."
+
 if [ -f "db_fluxocapital_sync.sql" ]; then
     if $MYSQL_CMD -D db_fluxocapital < db_fluxocapital_sync.sql; then
         echo ""
