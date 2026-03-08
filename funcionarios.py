@@ -3,6 +3,7 @@ from flask_login import login_required, current_user
 from auth import admin_required, is_superadmin
 from extensions import db
 from models import Funcionario, FuncionarioLancamento, FolhaPagamento, Transacao, Categoria, Carteira
+from utils import get_current_wallet
 from datetime import datetime, date
 from decimal import Decimal, InvalidOperation
 import calendar
@@ -19,8 +20,8 @@ def calcular_inss(salario_bruto, inss_percent=7.5):
 
 
 def get_carteira_ativa():
-    """Retorna o nome da carteira ativa na sessão."""
-    return session.get('carteira_ativa', 'Consolidada')
+    """Retorna o nome da carteira ativa (prioriza URL depois Sessão)."""
+    return get_current_wallet()
 
 
 def get_funcionarios_query(ativo=None):

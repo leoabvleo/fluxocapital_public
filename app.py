@@ -138,6 +138,7 @@ def log_action(message_template):
     return decorator
 
 from auth import admin_required, superadmin_required, is_superadmin, is_admin_or_superadmin
+from utils import get_current_wallet, get_authorized_query
 
 from extensions import db, login_manager
 from models import Usuario, Ativo, Venda, Dividendo, Categoria, Transacao, CategoriaAtivo, CategoriaProvento, Carteira, PerfilUsuario
@@ -159,97 +160,13 @@ app.register_blueprint(funcionarios_bp)
 def load_user(user_id):
     return Usuario.query.get(int(user_id))
 
-def get_authorized_query(model, c_ativa):
-    """Retorna uma query filtrada pelas permissões do usuário e carteira ativa.
-    
-    SuperAdmin: acesso irrestrito a todos os dados.
-    Admin: acesso às suas carteiras atribuídas (com escrita).
-    Usuário: acesso somente leitura às suas carteiras atribuídas.
-    """
-    query = model.query
-    
-    # Se c_ativa for uma lista, tratamos a consolidação dessas carteiras
-    if isinstance(c_ativa, list):
-        if is_superadmin():
-            if 'Consolidada' in c_ativa:
-                return query
-            
-            c_objs = Carteira.query.filter(Carteira.nome.in_(c_ativa)).all()
-            c_ids = [c.id for c in c_objs]
-            if hasattr(model, 'carteira_id'):
-                return query.filter(model.carteira_id.in_(c_ids))
-            else:
-                return query.filter(model.carteira.in_(c_ativa))
-        else:
-            # Filtra apenas pelas carteiras que o usuário tem acesso
-            acessivel = [c.nome for c in current_user.carteiras]
-            permitidas = [nome for nome in c_ativa if nome in acessivel]
-            
-            if not permitidas:
-                return query.filter(False)
-            
-            c_objs = Carteira.query.filter(Carteira.nome.in_(permitidas)).all()
-            c_ids = [c.id for c in c_objs]
-            
-            if hasattr(model, 'carteira_id'):
-                return query.filter(model.carteira_id.in_(c_ids))
-            else:
-                return query.filter(model.carteira.in_(permitidas))
 
-    # SuperAdmin tem acesso total — sem filtro de carteira
-    if is_superadmin():
-        if c_ativa != 'Consolidada':
-            c_obj = Carteira.query.filter_by(nome=c_ativa).first()
-            if c_obj:
-                if hasattr(model, 'carteira_id'):
-                    return query.filter_by(carteira_id=c_obj.id)
-                else:
-                    return query.filter_by(carteira=c_ativa)
-            return query.filter(False)
-        return query  # 'Consolidada' = todos os dados para SuperAdmin
-    
-    if c_ativa == 'Consolidada':
-        # Admin e Usuário: filtrar pelas carteiras atribuídas
-        wallet_ids = [c.id for c in current_user.carteiras]
-        if wallet_ids:
-            if hasattr(model, 'carteira_id'):
-                return query.filter(model.carteira_id.in_(wallet_ids))
-            else:
-                wallet_nomes = [c.nome for c in current_user.carteiras]
-                return query.filter(model.carteira.in_(wallet_nomes))
-        return query.filter(False)
-    else:
-        # Carteira específica
-        c_obj = Carteira.query.filter_by(nome=c_ativa).first()
-        if c_obj:
-            # Verifica se o usuário tem acesso a essa carteira
-            if not is_admin_or_superadmin() or (current_user.perfil and current_user.perfil.nome == 'Admin'):
-                if c_obj not in current_user.carteiras:
-                    return query.filter(False)
-            
-            if hasattr(model, 'carteira_id'):
-                return query.filter_by(carteira_id=c_obj.id)
-            else:
-                return query.filter_by(carteira=c_ativa)
-        else:
-            return query.filter(False)
-    return query
-
-def get_current_wallet():
-    """Helper para obter a carteira ativa (ou lista delas) priorizando a URL e depois a Sessão."""
-    c_list = request.args.getlist('carteira')
-    if c_list:
-        if len(c_list) == 1 and c_list[0] == 'Consolidada':
-            c_ativa = 'Consolidada'
-        else:
-            if 'Consolidada' in c_list:
-                c_ativa = 'Consolidada'
-            else:
-                c_ativa = c_list if len(c_list) > 1 else c_list[0]
-        # Persiste na sessão para que links sem parâmetros mantenham a seleção
-        session['carteira_ativa'] = c_ativa
-        return c_ativa
-    return session.get('carteira_ativa', 'Consolidada')
+@app.before_request
+def sync_wallet_from_url():
+    """Sincroniza a seleção de carteira da URL para a sessão antes de cada requisição."""
+    if request.endpoint and 'static' not in request.endpoint:
+        if current_user and current_user.is_authenticated:
+            get_current_wallet()
 
 # --- FILTROS JINJA ---
 @app.template_filter('br_format')
@@ -895,7 +812,7 @@ def selecionar_carteira(carteira):
 @log_action("Geração de Relatórios")
 def relatorios():
     # Se veio do form, usa ela. Senão usa a da sessão.
-    c_ativa = request.form.get('carteira_sel', session.get('carteira_ativa', 'Consolidada'))
+    c_ativa = request.form.get('carteira_sel', get_current_wallet())
     
     # Tickers e Tipos únicos para os filtros usando a query autorizada
     q_t_div = get_authorized_query(Dividendo, c_ativa).with_entities(Dividendo.ticker)
@@ -1362,7 +1279,7 @@ def importar_proventos():
         session['import_carteira_id'] = int(carteira_id_form)
     else:
         # Usa a carteira ativa da sessão como fallback
-        c_ativa = session.get('carteira_ativa', 'Consolidada')
+        c_ativa = get_current_wallet()
         c_obj = Carteira.query.filter_by(nome=c_ativa).first()
         session['import_carteira_id'] = c_obj.id if c_obj else None
     
@@ -1761,7 +1678,7 @@ def salvar_confirmacao_aportes():
         valores = request.form.getlist('valor[]')
         excluir = request.form.getlist('excluir[]')
 
-        c_ativa = session.get('carteira_ativa', 'Consolidada')
+        c_ativa = get_current_wallet()
         c_obj = Carteira.query.filter_by(nome=c_ativa).first()
         c_id = c_obj.id if c_obj else None
         
@@ -1866,7 +1783,7 @@ def salvar_confirmacao_proventos():
         categorias_ativo = request.form.getlist('categoria_ativo[]')
         excluir = request.form.getlist('excluir[]') # Índices para excluir
 
-        c_ativa = session.get('carteira_ativa', 'Consolidada')
+        c_ativa = get_current_wallet()
         # Prioriza a carteira definida durante a importação do arquivo
         import_carteira_id = session.get('import_carteira_id')
         if import_carteira_id:
@@ -2003,7 +1920,7 @@ def add_categoria_ativo():
             
             # Se for Admin, vincula a uma carteira que o usuário possui
             if not is_superadmin():
-                c_ativa = session.get('carteira_ativa', 'Consolidada')
+                c_ativa = get_current_wallet()
                 c_obj = Carteira.query.filter_by(nome=c_ativa).first()
                 
                 # Se estiver em 'Consolidada' ou em uma carteira que não possui, usa a primeira disponível
@@ -2096,7 +2013,7 @@ def add_categoria_provento():
             
             # Se for Admin, vincula a uma carteira que o usuário possui
             if not is_superadmin():
-                c_ativa = session.get('carteira_ativa', 'Consolidada')
+                c_ativa = get_current_wallet()
                 c_obj = Carteira.query.filter_by(nome=c_ativa).first()
                 
                 # Se estiver em 'Consolidada' ou em uma carteira que não possui, usa a primeira disponível
@@ -2331,7 +2248,7 @@ def dados_desempenho_carteira():
 
     # 1. Obter Ativos de Renda Variável (fora do try para garantir retorno parcial no selector se o resto falhar)
     try:
-        c_ativa = session.get('carteira_ativa', 'Consolidada')
+        c_ativa = get_current_wallet()
         query_rv = get_authorized_query(Ativo, c_ativa).filter(Ativo.categoria.in_(['Ações', 'FIIs', 'BDRs', 'ETFs']))
         ativos_rv = query_rv.all()
         tickers_disponiveis = sorted(list(set([a.ticker for a in ativos_rv])))
@@ -2552,7 +2469,7 @@ def dados_desempenho_carteira():
 @login_required
 def dados_dividendos_mensais():
     from sqlalchemy import func
-    c_ativa = session.get('carteira_ativa', 'Consolidada')
+    c_ativa = get_current_wallet()
     
     # MySQL/MariaDB: date_format(data, '%Y-%m') usando query autorizada
     query = get_authorized_query(Dividendo, c_ativa).with_entities(
@@ -2568,7 +2485,7 @@ def dados_dividendos_mensais():
 @app.route('/dados_proventos_ano')
 @login_required
 def dados_proventos_ano():
-    c_ativa = session.get('carteira_ativa', 'Consolidada')
+    c_ativa = get_current_wallet()
     # MySQL/MariaDB: date_format(data, '%Y') usando query autorizada
     query = get_authorized_query(Dividendo, c_ativa).with_entities(
         func.date_format(Dividendo.data_recebimento, '%Y').label('y'), 
@@ -2583,7 +2500,7 @@ def dados_proventos_ano():
 @app.route('/dados_proventos_categoria')
 @login_required
 def dados_proventos_categoria():
-    c_ativa = session.get('carteira_ativa', 'Consolidada')
+    c_ativa = get_current_wallet()
     # Obtém mapeamento de ticker para categoria
     # Como um ticker pode ter sido comprado em datas diferentes com categorias potencialmente diferentes (embora improvável)
     # pegamos a categoria mais recente definida para cada ticker.
@@ -2615,7 +2532,7 @@ def dados_proventos_categoria_tempo():
     Parâmetro: modo=mensal (padrão) ou modo=anual
     """
     modo = request.args.get('modo', 'mensal')
-    c_ativa = session.get('carteira_ativa', 'Consolidada')
+    c_ativa = get_current_wallet()
 
     # Mapeamento ticker -> categoria usando query autorizada
     q_ativos = get_authorized_query(Ativo, c_ativa).with_entities(Ativo.ticker, Ativo.categoria).distinct()
@@ -2673,7 +2590,7 @@ def dados_aportes_tempo():
     """
     from collections import defaultdict
     modo = request.args.get('modo', 'mensal')
-    c_ativa = session.get('carteira_ativa', 'Consolidada')
+    c_ativa = get_current_wallet()
 
     # Lotes do ativo usando query autorizada
     q_lotes = get_authorized_query(Ativo, c_ativa)
@@ -2722,7 +2639,7 @@ def dados_dy_yoc():
     modo = request.args.get('modo', 'mensal')
 
     categorias_rv = ['Ações', 'FIIs']
-    c_ativa = session.get('carteira_ativa', 'Consolidada')
+    c_ativa = get_current_wallet()
     # Ativos de RV usando query autorizada
     q_rv = get_authorized_query(Ativo, c_ativa).filter(Ativo.categoria.in_(categorias_rv))
     ativos_rv = q_rv.all()
@@ -2795,7 +2712,7 @@ def dados_dy_yoc():
 @app.route('/dados_patrimonio_ano')
 @login_required
 def dados_patrimonio_ano():
-    c_ativa = session.get('carteira_ativa', 'Consolidada')
+    c_ativa = get_current_wallet()
     # 1. Obter todos os anos relevantes usando query autorizada
     q_a = get_authorized_query(Ativo, c_ativa).with_entities(func.date_format(Ativo.data_compra, '%Y'))
     q_v = get_authorized_query(Venda, c_ativa).with_entities(func.date_format(Venda.data_venda, '%Y'))
@@ -2838,7 +2755,7 @@ def dados_patrimonio_ano():
 @login_required
 def dados_detalhe(ticker):
     modo = request.args.get('modo', 'mensal')
-    c_ativa = session.get('carteira_ativa', 'Consolidada')
+    c_ativa = get_current_wallet()
     
     # Informações básicas para cálculos usando query autorizada
     q_lotes = get_authorized_query(Ativo, c_ativa).filter_by(ticker=ticker)

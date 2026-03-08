@@ -42,3 +42,6 @@ update_knip_div.py
 verify_proventos.py
 query_db.py
 reset_password.py
+
+#outros arquivos
+.DS_Store
