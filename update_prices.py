@@ -1,114 +1,122 @@
 import requests
-import logging
+from requests.adapters import HTTPAdapter
+from urllib3.util.retry import Retry
 from datetime import datetime
 from app import app, db, Ativo
-from sqlalchemy import text
 
-# Configuração de logging básica para o console
-logging.basicConfig(level=logging.INFO, format='%(levelname)s: %(message)s')
+# --- Sessão HTTP com retry automático ---
+retry_strategy = Retry(
+    total=3,
+    connect=False,      # Não retenta erros de DNS/conexão (inútil, não muda nada)
+    read=False,         # Não retenta erros de leitura
+    backoff_factor=1,
+    status_forcelist=[429, 500, 502, 503, 504]  # Só retenta erros HTTP transitórios
+)
+adapter = HTTPAdapter(max_retries=retry_strategy)
+http_session = requests.Session()
+http_session.mount("https://", adapter)
 
 def get_price(ticker, headers):
     try:
         url = f"https://query1.finance.yahoo.com/v8/finance/chart/{ticker}?interval=1d&range=1d"
-        response = requests.get(url, headers=headers, timeout=15)
-        response.raise_for_status()
+        response = http_session.get(url, headers=headers, timeout=5)
+        response.raise_for_status()  # Melhoria 1: lança exceção para 4xx/5xx
         dados = response.json()
+        # Melhoria 2: verificação segura de chaves antes de acessar
         if dados and 'chart' in dados and dados['chart']['result']:
-            result = dados['chart']['result'][0]
-            if 'meta' in result and 'regularMarketPrice' in result['meta']:
-                return float(result['meta']['regularMarketPrice'])
-    except Exception as e:
-        logging.debug(f"Erro ao buscar preço para {ticker}: {e}")
+            return dados['chart']['result'][0]['meta']['regularMarketPrice']
+    except Exception:
+        return None
     return None
 
 def get_pvp(ticker):
     try:
         url = f"https://content.btgpactual.com/api/research/public-router/content-hub-assets/v1/asset-indicators/{ticker}?periodFilter=LAST_12_MONTHS&locale=pt-BR"
-        headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'}
-        response = requests.get(url, headers=headers, timeout=15)
-        if response.status_code == 200:
-            data = response.json()
-            for cat in data.get('categories', []):
-                for ind in cat.get('indicators', []):
-                    if ind.get('indicator', {}).get('indicator') in ['PRICE_TO_BOOK_VALUE', 'PRICE_TO_BOOK_VALUE_REIT']:
-                        if ind.get('data') and len(ind['data']) > 0:
-                            return float(ind['data'][-1][1])
+        headers = {'User-Agent': 'Mozilla/5.0'}
+        response = http_session.get(url, headers=headers, timeout=5)
+        response.raise_for_status()  # Melhoria 1: lança exceção para 4xx/5xx
+        data = response.json()
+        for cat in data.get('categories', []):
+            for ind in cat.get('indicators', []):
+                # O indicador pode ter nomes diferentes para Ações e FIIs
+                if ind.get('indicator', {}).get('indicator') in ['PRICE_TO_BOOK_VALUE', 'PRICE_TO_BOOK_VALUE_REIT']:
+                    # Pega o último valor disponível (mais recente)
+                    if ind.get('data'):
+                        return ind['data'][-1][1]
     except Exception:
-        pass
+        return None
     return None
 
 def atualizar():
     with app.app_context():
         try:
-            logging.info(f"--- Início da Atualização: {datetime.now().strftime('%d/%m/%Y %H:%M:%S')} ---")
+            # Pegamos todos os ativos para agrupar por ticker
+            todos_ativos = db.session.query(Ativo.ticker, Ativo.categoria).all()
             
-            ativos = Ativo.query.all()
-            if not ativos:
-                logging.warning("Nenhum ativo encontrado no banco de dados.")
+            if not todos_ativos:
+                print("Nenhum ativo encontrado.")
                 return
 
-            # Agrupar tickers e categorias, limpando o ticker
-            tickers_to_update = {}
-            for a in ativos:
-                clean_ticker = a.ticker.strip().upper()
-                if clean_ticker != a.ticker:
-                    logging.info(f"Corrigindo ticker com espaços: '{a.ticker}' -> '{clean_ticker}'")
-                    a.ticker = clean_ticker
-                
-                if clean_ticker not in tickers_to_update:
-                    tickers_to_update[clean_ticker] = a.categoria
-                elif a.categoria == 'Internacional':
-                    tickers_to_update[clean_ticker] = 'Internacional'
+            # Agrupa por ticker e decide a categoria predominante (ou Internacional se houver)
+            tickers_map = {}
+            for a in todos_ativos:
+                if a.ticker not in tickers_map:
+                    tickers_map[a.ticker] = a.categoria
+                else:
+                    # Se houver 'Internacional' entre as categorias deste ticker, prioriza
+                    if a.categoria == 'Internacional':
+                        tickers_map[a.ticker] = 'Internacional'
 
-            db.session.commit()
+            print(f"\n--- Início da Atualização: {datetime.now().strftime('%d/%m/%Y %H:%M:%S')} ---")
+            headers = {'User-Agent': 'Mozilla/5.0'}
 
-            headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'}
-            
-            # Buscar cotação do Dólar
+            # 1. Buscar cotação do Dólar primeiro
             usd_brl = get_price("USDBRL=X", headers)
             if usd_brl:
-                logging.info(f"[CÂMBIO] USDBRL: R$ {usd_brl:.4f}")
+                print(f"[CÂMBIO] USDBRL: R$ {usd_brl:.4f}")
             else:
-                logging.warning("[CÂMBIO] Erro ao buscar dólar. Usando 5.00 como fallback.")
+                print("[CÂMBIO] Erro ao buscar dólar. Usando 5.00 como fallback.")
                 usd_brl = 5.00
 
-            for ticker, categoria in tickers_to_update.items():
+            for ticker, categoria in tickers_map.items():
                 preco_final = None
                 pvp_final = None
                 
                 try:
                     if categoria == 'Internacional':
-                        preco_raw = get_price(ticker, headers)
+                        ticker_yahoo = ticker
+                        preco_raw = get_price(ticker_yahoo, headers)
                         if preco_raw:
                             preco_final = preco_raw * usd_brl
-                            logging.info(f"[{ticker}] US$ {preco_raw:.2f} -> R$ {preco_final:.2f}")
+                            print(f"[{ticker}] US$ {preco_raw:.2f} -> R$ {preco_final:.2f} (Convertido)")
                     else:
+                        # Ativos B3
                         ticker_yahoo = f"{ticker}.SA"
                         preco_final = get_price(ticker_yahoo, headers)
+                        # Busca P/VP apenas para B3 (Ações e FIIs principalmente)
                         pvp_final = get_pvp(ticker)
                         
                         if preco_final:
-                            msg = f"[{ticker}] R$ {preco_final:.2f}"
-                            if pvp_final: msg += f" | P/VP: {pvp_final:.2f}"
-                            logging.info(msg)
+                            print(f"[{ticker}] R$ {preco_final:.2f} | P/VP: {pvp_final if pvp_final else 'N/A'}")
 
                     if preco_final is not None:
                         update_values = {"preco_atual": preco_final}
                         if pvp_final is not None:
                             update_values["pvp"] = pvp_final
                         
-                        # Update em massa para o ticker
-                        db.session.query(Ativo).filter(Ativo.ticker == ticker).update(update_values, synchronize_session=False)
+                        # Melhoria 3: synchronize_session=False evita overhead do SQLAlchemy
+                        db.session.query(Ativo).filter(Ativo.ticker == ticker).update(
+                            update_values, synchronize_session=False
+                        )
 
                 except Exception as e:
-                    logging.error(f"[{ticker}] Erro ao processar: {e}")
+                    print(f"[{ticker}] Erro: {e}")
 
             db.session.commit()
-            logging.info(f"--- Fim da Atualização: {datetime.now().strftime('%d/%m/%Y %H:%M:%S')} ---")
+            print(f"--- Fim da Atualização ---\n")
 
         except Exception as e:
-            logging.error(f"Erro geral durante a atualização: {e}")
+            print(f"Erro geral: {e}")
 
 if __name__ == "__main__":
     atualizar()
-
