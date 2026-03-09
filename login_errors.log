@@ -336,3 +336,19 @@
 2026-03-08 20:29:26,802 INFO: 127.0.0.1 - - [08/Mar/2026 20:29:26] "GET /funcionarios/folha?mes=03&ano=2026 HTTP/1.1" 200 -
 2026-03-08 20:29:26,825 INFO: 127.0.0.1 - - [08/Mar/2026 20:29:26] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
 2026-03-08 20:29:37,766 INFO: 127.0.0.1 - - [08/Mar/2026 20:29:37] "GET /funcionarios/folha/relatorio?mes=3&ano=2026 HTTP/1.1" 200 -
+2026-03-09 08:06:58,167 INFO: [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5001
+2026-03-09 08:06:58,168 INFO: [33mPress CTRL+C to quit[0m
+2026-03-09 08:06:58,168 INFO:  * Restarting with stat
+2026-03-09 08:06:58,684 WARNING:  * Debugger is active!
+2026-03-09 08:06:58,689 INFO:  * Debugger PIN: 866-719-685
+2026-03-09 08:07:04,502 INFO: 127.0.0.1 - - [09/Mar/2026 08:07:04] "[32mGET / HTTP/1.1[0m" 302 -
+2026-03-09 08:07:04,517 INFO: 127.0.0.1 - - [09/Mar/2026 08:07:04] "GET /login?next=/ HTTP/1.1" 200 -
+2026-03-09 08:07:09,941 INFO: USUÁRIO: admin | AÇÃO: Login de usuário [SUCESSO] (username: admin) | IP: 127.0.0.1
+2026-03-09 08:07:09,942 INFO: 127.0.0.1 - - [09/Mar/2026 08:07:09] "[32mPOST /login?next=/ HTTP/1.1[0m" 302 -
+2026-03-09 08:07:09,974 INFO: 127.0.0.1 - - [09/Mar/2026 08:07:09] "GET / HTTP/1.1" 200 -
+2026-03-09 08:07:10,026 INFO: 127.0.0.1 - - [09/Mar/2026 08:07:10] "GET /static/css/style.css HTTP/1.1" 200 -
+2026-03-09 08:07:13,765 INFO: 127.0.0.1 - - [09/Mar/2026 08:07:13] "GET / HTTP/1.1" 200 -
+2026-03-09 08:07:13,781 INFO: 127.0.0.1 - - [09/Mar/2026 08:07:13] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2026-03-09 08:07:15,833 INFO: 127.0.0.1 - - [09/Mar/2026 08:07:15] "GET / HTTP/1.1" 200 -
+2026-03-09 08:07:15,855 INFO: 127.0.0.1 - - [09/Mar/2026 08:07:15] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -

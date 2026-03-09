@@ -35,3 +35,4 @@
 2026-03-08 20:29:20,243 - USUÁRIO: admin | AÇÃO: Pagamento de Salário (forma_pagamento: Chave Pix) | IP: 127.0.0.1
 2026-03-08 20:29:23,495 - USUÁRIO: admin | AÇÃO: Pagamento de Salário (forma_pagamento: Transferência) | IP: 127.0.0.1
 2026-03-08 20:29:26,781 - USUÁRIO: admin | AÇÃO: Pagamento de Salário (forma_pagamento: Espécie) | IP: 127.0.0.1
+2026-03-09 08:07:09,941 - USUÁRIO: admin | AÇÃO: Login de usuário [SUCESSO] (username: admin) | IP: 127.0.0.1
